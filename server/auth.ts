@@ -105,14 +105,28 @@ export class AuthService {
     try {
       console.log(
         "AuthService: Starting login process for:",
-        credentials.email
+        credentials.email,
+        "at:",
+        new Date().toISOString()
       );
 
+      // Validate inputs
+      if (!credentials.email || !credentials.password) {
+        throw new Error("Email and password are required");
+      }
+
       // Find user by email
+      console.log("AuthService: Attempting to fetch user from database");
       const user = await storage.getUserByEmail(credentials.email);
-      if (!user || !user.password) {
+
+      if (!user) {
+        console.log("AuthService: User not found for:", credentials.email);
+        throw new Error("Invalid email or password");
+      }
+
+      if (!user.password) {
         console.log(
-          "AuthService: User not found or no password set for:",
+          "AuthService: User has no password set for:",
           credentials.email
         );
         throw new Error("Invalid email or password");
@@ -142,7 +156,11 @@ export class AuthService {
       console.log("AuthService: Login successful for:", credentials.email);
       return { user, token };
     } catch (error) {
-      console.error("AuthService: Login error:", error);
+      console.error("AuthService: Login error for:", credentials.email, {
+        error: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : undefined,
+        timestamp: new Date().toISOString(),
+      });
       throw error;
     }
   }

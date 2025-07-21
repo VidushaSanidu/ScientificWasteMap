@@ -22,12 +22,21 @@ if (!process.env.DATABASE_URL) {
   );
 }
 
+console.log("Initializing database connection...");
+
 // Create connection pool with serverless-optimized settings
 export const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   max: 1, // Limit connections in serverless environment
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 5000,
+  connectionTimeoutMillis: 10000, // Increased timeout for cold starts
+});
+
+// Add connection error handling
+pool.on("error", (err) => {
+  console.error("Database pool error:", err);
 });
 
 export const db = drizzle({ client: pool, schema });
+
+console.log("Database connection initialized successfully");

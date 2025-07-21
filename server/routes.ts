@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
 import { authService } from "./auth";
+import { healthCheck } from "./health";
 import {
   authenticateToken,
   requireAdmin,
@@ -18,35 +19,8 @@ import {
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Health check endpoint
-  app.get("/api/health", async (req, res) => {
-    try {
-      console.log("Health check requested");
-
-      // Check database connection
-      const testUser = await storage.getUserByEmail("test@example.com");
-
-      const healthStatus = {
-        status: "ok",
-        timestamp: new Date().toISOString(),
-        database: "connected",
-        environment: process.env.NODE_ENV || "unknown",
-        hasJwtSecret: !!process.env.JWT_SECRET,
-        hasDatabaseUrl: !!process.env.DATABASE_URL,
-      };
-
-      console.log("Health check successful:", healthStatus);
-      res.json(healthStatus);
-    } catch (error) {
-      console.error("Health check failed:", error);
-      res.status(500).json({
-        status: "error",
-        timestamp: new Date().toISOString(),
-        error: error instanceof Error ? error.message : "Unknown error",
-        database: "disconnected",
-      });
-    }
-  });
+  // Health check endpoint with caching and timeout handling
+  app.get("/api/health", healthCheck);
 
   // Initialize admin user on startup
   try {

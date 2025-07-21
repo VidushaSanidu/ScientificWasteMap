@@ -27,22 +27,34 @@ export interface IStorage {
   // Disposal locations
   getDisposalLocations(): Promise<DisposalLocation[]>;
   getDisposalLocationsByType(type: string): Promise<DisposalLocation[]>;
-  createDisposalLocation(location: InsertDisposalLocation): Promise<DisposalLocation>;
-  updateDisposalLocation(id: number, location: Partial<InsertDisposalLocation>): Promise<DisposalLocation | undefined>;
+  createDisposalLocation(
+    location: InsertDisposalLocation
+  ): Promise<DisposalLocation>;
+  updateDisposalLocation(
+    id: number,
+    location: Partial<InsertDisposalLocation>
+  ): Promise<DisposalLocation | undefined>;
   deleteDisposalLocation(id: number): Promise<boolean>;
 
   // Events
   getEvents(): Promise<Event[]>;
   getActiveEvents(): Promise<Event[]>;
   createEvent(event: InsertEvent): Promise<Event>;
-  updateEvent(id: number, event: Partial<InsertEvent>): Promise<Event | undefined>;
+  updateEvent(
+    id: number,
+    event: Partial<InsertEvent>
+  ): Promise<Event | undefined>;
   deleteEvent(id: number): Promise<boolean>;
   joinEvent(eventId: number): Promise<Event | undefined>;
 
   // Feedback
   getFeedback(): Promise<Feedback[]>;
   createFeedback(feedbackData: InsertFeedback): Promise<Feedback>;
-  updateFeedbackStatus(id: number, status: string, response?: string): Promise<Feedback | undefined>;
+  updateFeedbackStatus(
+    id: number,
+    status: string,
+    response?: string
+  ): Promise<Feedback | undefined>;
 
   // Stats
   getStats(): Promise<Stats | undefined>;
@@ -73,20 +85,38 @@ export class DatabaseStorage implements IStorage {
 
   // Disposal locations
   async getDisposalLocations(): Promise<DisposalLocation[]> {
-    return await db.select().from(disposalLocations).where(eq(disposalLocations.isActive, true));
+    return await db
+      .select()
+      .from(disposalLocations)
+      .where(eq(disposalLocations.isActive, true));
   }
 
   async getDisposalLocationsByType(type: string): Promise<DisposalLocation[]> {
-    return await db.select().from(disposalLocations)
-      .where(and(eq(disposalLocations.type, type), eq(disposalLocations.isActive, true)));
+    return await db
+      .select()
+      .from(disposalLocations)
+      .where(
+        and(
+          eq(disposalLocations.type, type),
+          eq(disposalLocations.isActive, true)
+        )
+      );
   }
 
-  async createDisposalLocation(location: InsertDisposalLocation): Promise<DisposalLocation> {
-    const [newLocation] = await db.insert(disposalLocations).values(location).returning();
+  async createDisposalLocation(
+    location: InsertDisposalLocation
+  ): Promise<DisposalLocation> {
+    const [newLocation] = await db
+      .insert(disposalLocations)
+      .values(location)
+      .returning();
     return newLocation;
   }
 
-  async updateDisposalLocation(id: number, location: Partial<InsertDisposalLocation>): Promise<DisposalLocation | undefined> {
+  async updateDisposalLocation(
+    id: number,
+    location: Partial<InsertDisposalLocation>
+  ): Promise<DisposalLocation | undefined> {
     const [updatedLocation] = await db
       .update(disposalLocations)
       .set({ ...location, updatedAt: new Date() })
@@ -106,12 +136,18 @@ export class DatabaseStorage implements IStorage {
 
   // Events
   async getEvents(): Promise<Event[]> {
-    return await db.select().from(events).where(eq(events.isActive, true)).orderBy(desc(events.eventDate));
+    return await db
+      .select()
+      .from(events)
+      .where(eq(events.isActive, true))
+      .orderBy(desc(events.eventDate));
   }
 
   async getActiveEvents(): Promise<Event[]> {
     const now = new Date();
-    return await db.select().from(events)
+    return await db
+      .select()
+      .from(events)
       .where(and(eq(events.isActive, true)))
       .orderBy(events.eventDate);
   }
@@ -121,7 +157,10 @@ export class DatabaseStorage implements IStorage {
     return newEvent;
   }
 
-  async updateEvent(id: number, event: Partial<InsertEvent>): Promise<Event | undefined> {
+  async updateEvent(
+    id: number,
+    event: Partial<InsertEvent>
+  ): Promise<Event | undefined> {
     const [updatedEvent] = await db
       .update(events)
       .set({ ...event, updatedAt: new Date() })
@@ -140,20 +179,26 @@ export class DatabaseStorage implements IStorage {
   }
 
   async joinEvent(eventId: number): Promise<Event | undefined> {
-    const [event] = await db.select().from(events).where(eq(events.id, eventId));
-    if (!event || event.currentParticipants >= event.maxParticipants) {
+    const [event] = await db
+      .select()
+      .from(events)
+      .where(eq(events.id, eventId));
+    if (
+      !event ||
+      (event.currentParticipants ?? 0) >= (event.maxParticipants ?? 0)
+    ) {
       return undefined;
     }
 
     const [updatedEvent] = await db
       .update(events)
-      .set({ 
-        currentParticipants: event.currentParticipants + 1,
-        updatedAt: new Date()
+      .set({
+        currentParticipants: (event.currentParticipants ?? 0) + 1,
+        updatedAt: new Date(),
       })
       .where(eq(events.id, eventId))
       .returning();
-    
+
     return updatedEvent;
   }
 
@@ -163,11 +208,18 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createFeedback(feedbackData: InsertFeedback): Promise<Feedback> {
-    const [newFeedback] = await db.insert(feedback).values(feedbackData).returning();
+    const [newFeedback] = await db
+      .insert(feedback)
+      .values(feedbackData)
+      .returning();
     return newFeedback;
   }
 
-  async updateFeedbackStatus(id: number, status: string, response?: string): Promise<Feedback | undefined> {
+  async updateFeedbackStatus(
+    id: number,
+    status: string,
+    response?: string
+  ): Promise<Feedback | undefined> {
     const updateData: any = { status, updatedAt: new Date() };
     if (response) {
       updateData.adminResponse = response;
@@ -178,7 +230,7 @@ export class DatabaseStorage implements IStorage {
       .set(updateData)
       .where(eq(feedback.id, id))
       .returning();
-    
+
     return updatedFeedback;
   }
 
@@ -190,7 +242,7 @@ export class DatabaseStorage implements IStorage {
 
   async updateStats(statsData: InsertStats): Promise<Stats> {
     const existing = await this.getStats();
-    
+
     if (existing) {
       const [updatedStats] = await db
         .update(stats)

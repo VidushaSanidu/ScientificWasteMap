@@ -9,10 +9,24 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, MapPin, Calendar, MessageSquare, BarChart3, Plus, Trash2 } from "lucide-react";
+import {
+  ArrowLeft,
+  MapPin,
+  Calendar,
+  MessageSquare,
+  BarChart3,
+  Plus,
+  Trash2,
+} from "lucide-react";
 import { Link } from "wouter";
 
 interface DisposalLocation {
@@ -64,27 +78,27 @@ export default function Admin() {
   const { isAuthenticated, isLoading } = useAuth();
   const queryClient = useQueryClient();
   const [newLocation, setNewLocation] = useState({
-    name: '',
-    description: '',
-    latitude: '',
-    longitude: '',
-    type: 'general',
-    capacity: 'medium',
-    operatingHours: '24/7'
+    name: "",
+    description: "",
+    latitude: "",
+    longitude: "",
+    type: "general wastes",
+    capacity: "medium",
+    operatingHours: "24/7",
   });
   const [newEvent, setNewEvent] = useState({
-    title: '',
-    description: '',
-    eventDate: '',
-    location: '',
-    eventType: 'cleanup',
-    maxParticipants: 50
+    title: "",
+    description: "",
+    eventDate: "",
+    location: "",
+    eventType: "cleanup",
+    maxParticipants: 50,
   });
   const [newStats, setNewStats] = useState({
     disposalPoints: 0,
-    monthlyWaste: '0T',
-    recyclableRate: '0%',
-    activeUsers: '0'
+    monthlyWaste: "0T",
+    recyclableRate: "0%",
+    activeUsers: "0",
   });
 
   // Redirect to home if not authenticated
@@ -107,41 +121,43 @@ export default function Admin() {
   }, []);
 
   // Queries
-  const { data: locations, isLoading: locationsLoading } = useQuery({
-    queryKey: ['/api/disposal-locations'],
+  const { data: locations, isLoading: locationsLoading } = useQuery<
+    DisposalLocation[]
+  >({
+    queryKey: ["/api/disposal-locations"],
     retry: false,
   });
 
-  const { data: events, isLoading: eventsLoading } = useQuery({
-    queryKey: ['/api/events'],
+  const { data: events, isLoading: eventsLoading } = useQuery<Event[]>({
+    queryKey: ["/api/events"],
     retry: false,
   });
 
-  const { data: feedback, isLoading: feedbackLoading } = useQuery({
-    queryKey: ['/api/feedback'],
+  const { data: feedback, isLoading: feedbackLoading } = useQuery<Feedback[]>({
+    queryKey: ["/api/feedback"],
     retry: false,
   });
 
-  const { data: stats, isLoading: statsLoading } = useQuery({
-    queryKey: ['/api/stats'],
+  const { data: stats, isLoading: statsLoading } = useQuery<Stats>({
+    queryKey: ["/api/stats"],
     retry: false,
   });
 
   // Mutations
   const createLocationMutation = useMutation({
     mutationFn: async (locationData: any) => {
-      await apiRequest('POST', '/api/disposal-locations', locationData);
+      await apiRequest("POST", "/api/disposal-locations", locationData);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/disposal-locations'] });
+      queryClient.invalidateQueries({ queryKey: ["/api/disposal-locations"] });
       setNewLocation({
-        name: '',
-        description: '',
-        latitude: '',
-        longitude: '',
-        type: 'general',
-        capacity: 'medium',
-        operatingHours: '24/7'
+        name: "",
+        description: "",
+        latitude: "",
+        longitude: "",
+        type: "general wastes",
+        capacity: "medium",
+        operatingHours: "24/7",
       });
       toast({
         title: "Success",
@@ -170,10 +186,10 @@ export default function Admin() {
 
   const deleteLocationMutation = useMutation({
     mutationFn: async (locationId: number) => {
-      await apiRequest('DELETE', `/api/disposal-locations/${locationId}`);
+      await apiRequest("DELETE", `/api/disposal-locations/${locationId}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/disposal-locations'] });
+      queryClient.invalidateQueries({ queryKey: ["/api/disposal-locations"] });
       toast({
         title: "Success",
         description: "Disposal location deleted successfully.",
@@ -201,17 +217,17 @@ export default function Admin() {
 
   const createEventMutation = useMutation({
     mutationFn: async (eventData: any) => {
-      await apiRequest('POST', '/api/events', eventData);
+      await apiRequest("POST", "/api/events", eventData);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/events'] });
+      queryClient.invalidateQueries({ queryKey: ["/api/events"] });
       setNewEvent({
-        title: '',
-        description: '',
-        eventDate: '',
-        location: '',
-        eventType: 'cleanup',
-        maxParticipants: 50
+        title: "",
+        description: "",
+        eventDate: "",
+        location: "",
+        eventType: "cleanup",
+        maxParticipants: 50,
       });
       toast({
         title: "Success",
@@ -240,10 +256,10 @@ export default function Admin() {
 
   const updateStatsMutation = useMutation({
     mutationFn: async (statsData: any) => {
-      await apiRequest('PUT', '/api/stats', statsData);
+      await apiRequest("PUT", "/api/stats", statsData);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/stats'] });
+      queryClient.invalidateQueries({ queryKey: ["/api/stats"] });
       toast({
         title: "Success",
         description: "Statistics updated successfully.",
@@ -270,11 +286,19 @@ export default function Admin() {
   });
 
   const updateFeedbackMutation = useMutation({
-    mutationFn: async ({ id, status, adminResponse }: { id: number; status: string; adminResponse?: string }) => {
-      await apiRequest('PUT', `/api/feedback/${id}`, { status, adminResponse });
+    mutationFn: async ({
+      id,
+      status,
+      adminResponse,
+    }: {
+      id: number;
+      status: string;
+      adminResponse?: string;
+    }) => {
+      await apiRequest("PUT", `/api/feedback/${id}`, { status, adminResponse });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/feedback'] });
+      queryClient.invalidateQueries({ queryKey: ["/api/feedback"] });
       toast({
         title: "Success",
         description: "Feedback status updated successfully.",
@@ -305,15 +329,19 @@ export default function Admin() {
     if (stats) {
       setNewStats({
         disposalPoints: stats.disposalPoints || 0,
-        monthlyWaste: stats.monthlyWaste || '0T',
-        recyclableRate: stats.recyclableRate || '0%',
-        activeUsers: stats.activeUsers || '0'
+        monthlyWaste: stats.monthlyWaste || "0T",
+        recyclableRate: stats.recyclableRate || "0%",
+        activeUsers: stats.activeUsers || "0",
       });
     }
   }, [stats]);
 
   if (isLoading) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        Loading...
+      </div>
+    );
   }
 
   return (
@@ -330,11 +358,13 @@ export default function Admin() {
               </Link>
               <div>
                 <h1 className="text-2xl font-bold text-forest">Admin Panel</h1>
-                <p className="text-xs text-university">Waste Management Portal</p>
+                <p className="text-xs text-university">
+                  Waste Management Portal
+                </p>
               </div>
             </div>
-            <Button 
-              onClick={() => window.location.href = '/api/logout'}
+            <Button
+              onClick={() => (window.location.href = "/api/logout")}
               variant="outline"
             >
               Logout
@@ -380,20 +410,34 @@ export default function Admin() {
                     <Input
                       id="name"
                       value={newLocation.name}
-                      onChange={(e) => setNewLocation({...newLocation, name: e.target.value})}
+                      onChange={(e) =>
+                        setNewLocation({ ...newLocation, name: e.target.value })
+                      }
                       placeholder="Location name"
                     />
                   </div>
                   <div>
                     <Label htmlFor="type">Type</Label>
-                    <Select value={newLocation.type} onValueChange={(value) => setNewLocation({...newLocation, type: value})}>
+                    <Select
+                      value={newLocation.type}
+                      onValueChange={(value) =>
+                        setNewLocation({ ...newLocation, type: value })
+                      }
+                    >
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="general">General</SelectItem>
-                        <SelectItem value="recyclable">Recyclable</SelectItem>
-                        <SelectItem value="organic">Organic</SelectItem>
+                        <SelectItem value="general wastes">
+                          General Wastes (food, plastic, polythene)
+                        </SelectItem>
+                        <SelectItem value="chemical wastes">
+                          Chemical Wastes
+                        </SelectItem>
+                        <SelectItem value="paper wastes">
+                          Paper Wastes
+                        </SelectItem>
+                        <SelectItem value="e wastes">E Wastes</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -402,7 +446,12 @@ export default function Admin() {
                     <Input
                       id="latitude"
                       value={newLocation.latitude}
-                      onChange={(e) => setNewLocation({...newLocation, latitude: e.target.value})}
+                      onChange={(e) =>
+                        setNewLocation({
+                          ...newLocation,
+                          latitude: e.target.value,
+                        })
+                      }
                       placeholder="7.2558"
                     />
                   </div>
@@ -411,13 +460,23 @@ export default function Admin() {
                     <Input
                       id="longitude"
                       value={newLocation.longitude}
-                      onChange={(e) => setNewLocation({...newLocation, longitude: e.target.value})}
+                      onChange={(e) =>
+                        setNewLocation({
+                          ...newLocation,
+                          longitude: e.target.value,
+                        })
+                      }
                       placeholder="80.5944"
                     />
                   </div>
                   <div>
                     <Label htmlFor="capacity">Capacity</Label>
-                    <Select value={newLocation.capacity} onValueChange={(value) => setNewLocation({...newLocation, capacity: value})}>
+                    <Select
+                      value={newLocation.capacity}
+                      onValueChange={(value) =>
+                        setNewLocation({ ...newLocation, capacity: value })
+                      }
+                    >
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -433,7 +492,12 @@ export default function Admin() {
                     <Input
                       id="hours"
                       value={newLocation.operatingHours}
-                      onChange={(e) => setNewLocation({...newLocation, operatingHours: e.target.value})}
+                      onChange={(e) =>
+                        setNewLocation({
+                          ...newLocation,
+                          operatingHours: e.target.value,
+                        })
+                      }
                       placeholder="24/7"
                     />
                   </div>
@@ -443,16 +507,28 @@ export default function Admin() {
                   <Textarea
                     id="description"
                     value={newLocation.description}
-                    onChange={(e) => setNewLocation({...newLocation, description: e.target.value})}
+                    onChange={(e) =>
+                      setNewLocation({
+                        ...newLocation,
+                        description: e.target.value,
+                      })
+                    }
                     placeholder="Description of disposal location"
                   />
                 </div>
                 <Button
                   onClick={() => createLocationMutation.mutate(newLocation)}
-                  disabled={createLocationMutation.isPending || !newLocation.name || !newLocation.latitude || !newLocation.longitude}
+                  disabled={
+                    createLocationMutation.isPending ||
+                    !newLocation.name ||
+                    !newLocation.latitude ||
+                    !newLocation.longitude
+                  }
                   className="bg-forest hover:bg-eco"
                 >
-                  {createLocationMutation.isPending ? 'Creating...' : 'Create Location'}
+                  {createLocationMutation.isPending
+                    ? "Creating..."
+                    : "Create Location"}
                 </Button>
               </CardContent>
             </Card>
@@ -467,21 +543,42 @@ export default function Admin() {
                 ) : (
                   <div className="space-y-4">
                     {locations?.map((location: DisposalLocation) => (
-                      <div key={location.id} className="flex items-center justify-between p-4 border rounded-lg">
+                      <div
+                        key={location.id}
+                        className="flex items-center justify-between p-4 border rounded-lg"
+                      >
                         <div>
                           <h4 className="font-semibold">{location.name}</h4>
-                          <p className="text-sm text-gray-600">{location.description}</p>
+                          <p className="text-sm text-gray-600">
+                            {location.description}
+                          </p>
                           <div className="flex items-center space-x-2 mt-2">
-                            <Badge variant={location.type === 'recyclable' ? 'default' : location.type === 'organic' ? 'secondary' : 'outline'}>
+                            <Badge
+                              variant={
+                                location.type === "general wastes"
+                                  ? "outline"
+                                  : location.type === "chemical wastes"
+                                  ? "destructive"
+                                  : location.type === "paper wastes"
+                                  ? "secondary"
+                                  : location.type === "e wastes"
+                                  ? "default"
+                                  : "outline"
+                              }
+                            >
                               {location.type}
                             </Badge>
-                            <span className="text-sm text-gray-500">Capacity: {location.capacity}</span>
+                            <span className="text-sm text-gray-500">
+                              Capacity: {location.capacity}
+                            </span>
                           </div>
                         </div>
                         <Button
                           variant="destructive"
                           size="sm"
-                          onClick={() => deleteLocationMutation.mutate(location.id)}
+                          onClick={() =>
+                            deleteLocationMutation.mutate(location.id)
+                          }
                           disabled={deleteLocationMutation.isPending}
                         >
                           <Trash2 className="h-4 w-4" />
@@ -490,7 +587,8 @@ export default function Admin() {
                     ))}
                     {(!locations || locations.length === 0) && (
                       <div className="text-center py-8 text-gray-500">
-                        No disposal locations found. Add your first location above.
+                        No disposal locations found. Add your first location
+                        above.
                       </div>
                     )}
                   </div>
@@ -515,13 +613,20 @@ export default function Admin() {
                     <Input
                       id="eventTitle"
                       value={newEvent.title}
-                      onChange={(e) => setNewEvent({...newEvent, title: e.target.value})}
+                      onChange={(e) =>
+                        setNewEvent({ ...newEvent, title: e.target.value })
+                      }
                       placeholder="Event title"
                     />
                   </div>
                   <div>
                     <Label htmlFor="eventType">Type</Label>
-                    <Select value={newEvent.eventType} onValueChange={(value) => setNewEvent({...newEvent, eventType: value})}>
+                    <Select
+                      value={newEvent.eventType}
+                      onValueChange={(value) =>
+                        setNewEvent({ ...newEvent, eventType: value })
+                      }
+                    >
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -538,7 +643,9 @@ export default function Admin() {
                       id="eventDate"
                       type="datetime-local"
                       value={newEvent.eventDate}
-                      onChange={(e) => setNewEvent({...newEvent, eventDate: e.target.value})}
+                      onChange={(e) =>
+                        setNewEvent({ ...newEvent, eventDate: e.target.value })
+                      }
                     />
                   </div>
                   <div>
@@ -546,7 +653,9 @@ export default function Admin() {
                     <Input
                       id="eventLocation"
                       value={newEvent.location}
-                      onChange={(e) => setNewEvent({...newEvent, location: e.target.value})}
+                      onChange={(e) =>
+                        setNewEvent({ ...newEvent, location: e.target.value })
+                      }
                       placeholder="Event location"
                     />
                   </div>
@@ -556,7 +665,12 @@ export default function Admin() {
                       id="maxParticipants"
                       type="number"
                       value={newEvent.maxParticipants}
-                      onChange={(e) => setNewEvent({...newEvent, maxParticipants: parseInt(e.target.value)})}
+                      onChange={(e) =>
+                        setNewEvent({
+                          ...newEvent,
+                          maxParticipants: parseInt(e.target.value),
+                        })
+                      }
                     />
                   </div>
                 </div>
@@ -565,19 +679,29 @@ export default function Admin() {
                   <Textarea
                     id="eventDescription"
                     value={newEvent.description}
-                    onChange={(e) => setNewEvent({...newEvent, description: e.target.value})}
+                    onChange={(e) =>
+                      setNewEvent({ ...newEvent, description: e.target.value })
+                    }
                     placeholder="Event description"
                   />
                 </div>
                 <Button
-                  onClick={() => createEventMutation.mutate({
-                    ...newEvent,
-                    eventDate: new Date(newEvent.eventDate).toISOString()
-                  })}
-                  disabled={createEventMutation.isPending || !newEvent.title || !newEvent.eventDate}
+                  onClick={() =>
+                    createEventMutation.mutate({
+                      ...newEvent,
+                      eventDate: new Date(newEvent.eventDate).toISOString(),
+                    })
+                  }
+                  disabled={
+                    createEventMutation.isPending ||
+                    !newEvent.title ||
+                    !newEvent.eventDate
+                  }
                   className="bg-forest hover:bg-eco"
                 >
-                  {createEventMutation.isPending ? 'Creating...' : 'Create Event'}
+                  {createEventMutation.isPending
+                    ? "Creating..."
+                    : "Create Event"}
                 </Button>
               </CardContent>
             </Card>
@@ -596,15 +720,19 @@ export default function Admin() {
                         <div className="flex justify-between items-start">
                           <div>
                             <h4 className="font-semibold">{event.title}</h4>
-                            <p className="text-sm text-gray-600">{event.description}</p>
+                            <p className="text-sm text-gray-600">
+                              {event.description}
+                            </p>
                             <div className="flex items-center space-x-2 mt-2">
                               <Badge>{event.eventType}</Badge>
                               <span className="text-sm text-gray-500">
-                                {event.currentParticipants}/{event.maxParticipants} participants
+                                {event.currentParticipants}/
+                                {event.maxParticipants} participants
                               </span>
                             </div>
                             <p className="text-sm text-gray-500 mt-1">
-                              {new Date(event.eventDate).toLocaleDateString()} at {event.location}
+                              {new Date(event.eventDate).toLocaleDateString()}{" "}
+                              at {event.location}
                             </p>
                           </div>
                         </div>
@@ -637,33 +765,58 @@ export default function Admin() {
                         <div className="flex justify-between items-start mb-2">
                           <div>
                             <h4 className="font-semibold">
-                              {item.isAnonymous ? 'Anonymous' : item.name}
+                              {item.isAnonymous ? "Anonymous" : item.name}
                             </h4>
                             {!item.isAnonymous && (
-                              <p className="text-sm text-gray-600">{item.email}</p>
+                              <p className="text-sm text-gray-600">
+                                {item.email}
+                              </p>
                             )}
                           </div>
                           <div className="flex items-center space-x-2">
-                            <Badge variant={item.feedbackType === 'complaint' ? 'destructive' : 'default'}>
+                            <Badge
+                              variant={
+                                item.feedbackType === "complaint"
+                                  ? "destructive"
+                                  : "default"
+                              }
+                            >
                               {item.feedbackType}
                             </Badge>
-                            <Badge variant={item.status === 'pending' ? 'secondary' : item.status === 'reviewed' ? 'default' : 'outline'}>
+                            <Badge
+                              variant={
+                                item.status === "pending"
+                                  ? "secondary"
+                                  : item.status === "reviewed"
+                                  ? "default"
+                                  : "outline"
+                              }
+                            >
                               {item.status}
                             </Badge>
                           </div>
                         </div>
-                        <p className="text-sm text-gray-700 mb-2">{item.message}</p>
+                        <p className="text-sm text-gray-700 mb-2">
+                          {item.message}
+                        </p>
                         {item.location && (
-                          <p className="text-sm text-gray-500 mb-2">Location: {item.location}</p>
+                          <p className="text-sm text-gray-500 mb-2">
+                            Location: {item.location}
+                          </p>
                         )}
                         <p className="text-xs text-gray-400">
                           {new Date(item.createdAt).toLocaleDateString()}
                         </p>
-                        {item.status === 'pending' && (
+                        {item.status === "pending" && (
                           <div className="flex space-x-2 mt-2">
                             <Button
                               size="sm"
-                              onClick={() => updateFeedbackMutation.mutate({ id: item.id, status: 'reviewed' })}
+                              onClick={() =>
+                                updateFeedbackMutation.mutate({
+                                  id: item.id,
+                                  status: "reviewed",
+                                })
+                              }
                               disabled={updateFeedbackMutation.isPending}
                             >
                               Mark as Reviewed
@@ -671,7 +824,12 @@ export default function Admin() {
                             <Button
                               size="sm"
                               variant="outline"
-                              onClick={() => updateFeedbackMutation.mutate({ id: item.id, status: 'resolved' })}
+                              onClick={() =>
+                                updateFeedbackMutation.mutate({
+                                  id: item.id,
+                                  status: "resolved",
+                                })
+                              }
                               disabled={updateFeedbackMutation.isPending}
                             >
                               Mark as Resolved
@@ -705,7 +863,12 @@ export default function Admin() {
                       id="disposalPoints"
                       type="number"
                       value={newStats.disposalPoints}
-                      onChange={(e) => setNewStats({...newStats, disposalPoints: parseInt(e.target.value) || 0})}
+                      onChange={(e) =>
+                        setNewStats({
+                          ...newStats,
+                          disposalPoints: parseInt(e.target.value) || 0,
+                        })
+                      }
                     />
                   </div>
                   <div>
@@ -713,7 +876,12 @@ export default function Admin() {
                     <Input
                       id="monthlyWaste"
                       value={newStats.monthlyWaste}
-                      onChange={(e) => setNewStats({...newStats, monthlyWaste: e.target.value})}
+                      onChange={(e) =>
+                        setNewStats({
+                          ...newStats,
+                          monthlyWaste: e.target.value,
+                        })
+                      }
                       placeholder="2.4T"
                     />
                   </div>
@@ -722,7 +890,12 @@ export default function Admin() {
                     <Input
                       id="recyclableRate"
                       value={newStats.recyclableRate}
-                      onChange={(e) => setNewStats({...newStats, recyclableRate: e.target.value})}
+                      onChange={(e) =>
+                        setNewStats({
+                          ...newStats,
+                          recyclableRate: e.target.value,
+                        })
+                      }
                       placeholder="68%"
                     />
                   </div>
@@ -731,7 +904,12 @@ export default function Admin() {
                     <Input
                       id="activeUsers"
                       value={newStats.activeUsers}
-                      onChange={(e) => setNewStats({...newStats, activeUsers: e.target.value})}
+                      onChange={(e) =>
+                        setNewStats({
+                          ...newStats,
+                          activeUsers: e.target.value,
+                        })
+                      }
                       placeholder="1.2K"
                     />
                   </div>
@@ -741,7 +919,9 @@ export default function Admin() {
                   disabled={updateStatsMutation.isPending}
                   className="bg-forest hover:bg-eco"
                 >
-                  {updateStatsMutation.isPending ? 'Updating...' : 'Update Statistics'}
+                  {updateStatsMutation.isPending
+                    ? "Updating..."
+                    : "Update Statistics"}
                 </Button>
               </CardContent>
             </Card>
@@ -754,19 +934,27 @@ export default function Admin() {
                 <CardContent>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                     <div className="text-center">
-                      <div className="text-3xl font-bold text-forest mb-2">{stats.disposalPoints}</div>
+                      <div className="text-3xl font-bold text-forest mb-2">
+                        {stats.disposalPoints}
+                      </div>
                       <p className="text-gray-600">Disposal Points</p>
                     </div>
                     <div className="text-center">
-                      <div className="text-3xl font-bold text-eco mb-2">{stats.monthlyWaste}</div>
+                      <div className="text-3xl font-bold text-eco mb-2">
+                        {stats.monthlyWaste}
+                      </div>
                       <p className="text-gray-600">Monthly Waste</p>
                     </div>
                     <div className="text-center">
-                      <div className="text-3xl font-bold text-warning mb-2">{stats.recyclableRate}</div>
+                      <div className="text-3xl font-bold text-warning mb-2">
+                        {stats.recyclableRate}
+                      </div>
                       <p className="text-gray-600">Recyclable Rate</p>
                     </div>
                     <div className="text-center">
-                      <div className="text-3xl font-bold text-university mb-2">{stats.activeUsers}</div>
+                      <div className="text-3xl font-bold text-university mb-2">
+                        {stats.activeUsers}
+                      </div>
                       <p className="text-gray-600">Active Users</p>
                     </div>
                   </div>

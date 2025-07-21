@@ -2,11 +2,11 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
-import { 
+import {
   insertDisposalLocationSchema,
   insertEventSchema,
   insertFeedbackSchema,
-  insertStatsSchema
+  insertStatsSchema,
 } from "@shared/schema";
 import { z } from "zod";
 
@@ -15,8 +15,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
   await setupAuth(app);
 
   // Auth routes
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+  app.get("/api/auth/user", async (req: any, res) => {
     try {
+      // In local development mode, return a mock user for testing
+      if (!process.env.REPLIT_DOMAINS) {
+        return res.json({
+          id: "dev-user-1",
+          name: "Development User",
+          email: "dev@uop.ac.lk",
+          role: "admin",
+        });
+      }
+
+      // Production mode - require authentication
+      if (!req.user || !req.user.claims) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
       res.json(user);
@@ -27,10 +42,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Disposal locations routes
-  app.get('/api/disposal-locations', async (req, res) => {
+  app.get("/api/disposal-locations", async (req, res) => {
     try {
       const { type } = req.query;
-      const locations = type 
+      const locations = type
         ? await storage.getDisposalLocationsByType(type as string)
         : await storage.getDisposalLocations();
       res.json(locations);
@@ -40,7 +55,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/disposal-locations', isAuthenticated, async (req, res) => {
+  app.post("/api/disposal-locations", isAuthenticated, async (req, res) => {
     try {
       const locationData = insertDisposalLocationSchema.parse(req.body);
       const location = await storage.createDisposalLocation(locationData);
@@ -55,16 +70,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put('/api/disposal-locations/:id', isAuthenticated, async (req, res) => {
+  app.put("/api/disposal-locations/:id", isAuthenticated, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
-      const locationData = insertDisposalLocationSchema.partial().parse(req.body);
+      const locationData = insertDisposalLocationSchema
+        .partial()
+        .parse(req.body);
       const location = await storage.updateDisposalLocation(id, locationData);
-      
+
       if (!location) {
         return res.status(404).json({ message: "Disposal location not found" });
       }
-      
+
       res.json(location);
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -76,24 +93,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete('/api/disposal-locations/:id', isAuthenticated, async (req, res) => {
-    try {
-      const id = parseInt(req.params.id);
-      const success = await storage.deleteDisposalLocation(id);
-      
-      if (!success) {
-        return res.status(404).json({ message: "Disposal location not found" });
+  app.delete(
+    "/api/disposal-locations/:id",
+    isAuthenticated,
+    async (req, res) => {
+      try {
+        const id = parseInt(req.params.id);
+        const success = await storage.deleteDisposalLocation(id);
+
+        if (!success) {
+          return res
+            .status(404)
+            .json({ message: "Disposal location not found" });
+        }
+
+        res.json({ message: "Disposal location deleted successfully" });
+      } catch (error) {
+        console.error("Error deleting disposal location:", error);
+        res.status(500).json({ message: "Failed to delete disposal location" });
       }
-      
-      res.json({ message: "Disposal location deleted successfully" });
-    } catch (error) {
-      console.error("Error deleting disposal location:", error);
-      res.status(500).json({ message: "Failed to delete disposal location" });
     }
-  });
+  );
 
   // Events routes
-  app.get('/api/events', async (req, res) => {
+  app.get("/api/events", async (req, res) => {
     try {
       const events = await storage.getActiveEvents();
       res.json(events);
@@ -103,7 +126,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/events', isAuthenticated, async (req, res) => {
+  app.post("/api/events", isAuthenticated, async (req, res) => {
     try {
       const eventData = insertEventSchema.parse(req.body);
       const event = await storage.createEvent(eventData);
@@ -118,15 +141,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/events/:id/join', async (req, res) => {
+  app.post("/api/events/:id/join", async (req, res) => {
     try {
       const eventId = parseInt(req.params.id);
       const event = await storage.joinEvent(eventId);
-      
+
       if (!event) {
-        return res.status(400).json({ message: "Cannot join event - full or not found" });
+        return res
+          .status(400)
+          .json({ message: "Cannot join event - full or not found" });
       }
-      
+
       res.json(event);
     } catch (error) {
       console.error("Error joining event:", error);
@@ -135,7 +160,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Feedback routes
-  app.get('/api/feedback', isAuthenticated, async (req, res) => {
+  app.get("/api/feedback", isAuthenticated, async (req, res) => {
     try {
       const feedbackList = await storage.getFeedback();
       res.json(feedbackList);
@@ -145,7 +170,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/feedback', async (req, res) => {
+  app.post("/api/feedback", async (req, res) => {
     try {
       const feedbackData = insertFeedbackSchema.parse(req.body);
       const feedback = await storage.createFeedback(feedbackData);
@@ -160,17 +185,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put('/api/feedback/:id', isAuthenticated, async (req, res) => {
+  app.put("/api/feedback/:id", isAuthenticated, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const { status, adminResponse } = req.body;
-      
-      const feedback = await storage.updateFeedbackStatus(id, status, adminResponse);
-      
+
+      const feedback = await storage.updateFeedbackStatus(
+        id,
+        status,
+        adminResponse
+      );
+
       if (!feedback) {
         return res.status(404).json({ message: "Feedback not found" });
       }
-      
+
       res.json(feedback);
     } catch (error) {
       console.error("Error updating feedback:", error);
@@ -179,7 +208,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Stats routes
-  app.get('/api/stats', async (req, res) => {
+  app.get("/api/stats", async (req, res) => {
     try {
       const statsData = await storage.getStats();
       res.json(statsData);
@@ -189,7 +218,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put('/api/stats', isAuthenticated, async (req, res) => {
+  app.put("/api/stats", isAuthenticated, async (req, res) => {
     try {
       const statsData = insertStatsSchema.parse(req.body);
       const stats = await storage.updateStats(statsData);

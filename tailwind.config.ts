@@ -61,6 +61,13 @@ export default {
           border: "var(--sidebar-border)",
           ring: "var(--sidebar-ring)",
         },
+        // Custom colors for waste management theme
+        forest: "var(--forest)",
+        eco: "var(--eco)",
+        warning: "var(--warning)",
+        "bg-light": "var(--bg-light)",
+        "text-dark": "var(--text-dark)",
+        university: "var(--university)",
       },
       keyframes: {
         "accordion-down": {

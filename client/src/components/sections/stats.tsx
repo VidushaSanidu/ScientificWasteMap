@@ -1,9 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
 
+interface Stats {
+  disposalPoints: number;
+  monthlyWaste: string;
+  recyclableRate: string;
+  activeUsers: string;
+}
+
 export default function Stats() {
-  const { data: stats, isLoading } = useQuery({
-    queryKey: ['/api/stats'],
+  const { data: stats, isLoading } = useQuery<Stats>({
+    queryKey: ["/api/stats"],
     retry: false,
   });
 
@@ -26,9 +33,9 @@ export default function Stats() {
 
   const defaultStats = {
     disposalPoints: 0,
-    monthlyWaste: '0T',
-    recyclableRate: '0%',
-    activeUsers: '0'
+    monthlyWaste: "0T",
+    recyclableRate: "0%",
+    activeUsers: "0",
   };
 
   const currentStats = stats || defaultStats;

@@ -23,7 +23,7 @@
   --destructive-foreground: hsl(0, 0%, 98%);
   --ring: hsl(142, 71%, 23%);
   --radius: 0.75rem;
-  
+
   /* Custom colors for waste management theme */
   --forest: hsl(142, 71%, 23%);
   --eco: hsl(138, 49%, 35%);
@@ -53,7 +53,7 @@
   --destructive: hsl(0, 62.8%, 30.6%);
   --destructive-foreground: hsl(0, 0%, 98%);
   --ring: hsl(200, 4.9%, 83.9%);
-  
+
   /* Dark mode custom colors */
   --forest: hsl(142, 71%, 23%);
   --eco: hsl(138, 49%, 35%);
@@ -120,6 +120,29 @@
 }
 
 .text-dark {
+  color: var(--text-dark);
+}
+
+/* Fix for text-text-dark class used in components */
+.text-text-dark {
+  color: var(--text-dark);
+}
+
+/* Ensure good contrast for warning text */
+.bg-warning {
+  background-color: var(--warning);
+  color: var(--text-dark) !important;
+}
+
+/* Ensure good contrast for buttons and interactive elements */
+.btn-warning {
+  background-color: var(--warning);
+  color: var(--text-dark);
+  border: 1px solid var(--warning);
+}
+
+.btn-warning:hover {
+  background-color: hsl(45, 100%, 45%);
   color: var(--text-dark);
 }
 

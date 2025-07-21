@@ -43,7 +43,7 @@ export const disposalLocations = pgTable("disposal_locations", {
   description: text("description"),
   latitude: decimal("latitude", { precision: 10, scale: 8 }).notNull(),
   longitude: decimal("longitude", { precision: 11, scale: 8 }).notNull(),
-  type: varchar("type", { length: 20 }).notNull(), // 'recyclable', 'organic', 'general'
+  type: varchar("type", { length: 50 }).notNull(), // 'general wastes', 'chemical wastes', 'paper wastes', 'e wastes'
   capacity: varchar("capacity", { length: 20 }).notNull(), // 'low', 'medium', 'high'
   operatingHours: text("operating_hours").notNull(),
   isActive: boolean("is_active").default(true),

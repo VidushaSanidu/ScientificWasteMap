@@ -8,7 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -41,16 +47,17 @@ export default function Feedback() {
 
   const submitFeedbackMutation = useMutation({
     mutationFn: async (feedbackData: FeedbackFormData) => {
-      const submitData = form.getValues().isAnonymous 
+      const submitData = form.getValues().isAnonymous
         ? { ...feedbackData, name: "", email: "" }
         : feedbackData;
-      
-      await apiRequest('POST', '/api/feedback', submitData);
+
+      await apiRequest("POST", "/api/feedback", submitData);
     },
     onSuccess: () => {
       toast({
         title: "Success",
-        description: "Your feedback has been submitted successfully. Thank you!",
+        description:
+          "Your feedback has been submitted successfully. Thank you!",
       });
       form.reset();
       setIsSubmitting(false);
@@ -74,8 +81,13 @@ export default function Feedback() {
     <section className="py-16 bg-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-text-dark mb-4">Feedback & Complaints</h2>
-          <p className="text-lg text-gray-600">Help us improve our waste management services. Your feedback matters!</p>
+          <h2 className="text-4xl font-bold text-text-dark mb-4">
+            Feedback & Complaints
+          </h2>
+          <p className="text-lg text-gray-600">
+            Help us improve our waste management services. Your feedback
+            matters!
+          </p>
         </div>
 
         <Card className="bg-bg-light">
@@ -88,11 +100,13 @@ export default function Feedback() {
                     id="name"
                     {...form.register("name")}
                     placeholder="Enter your full name"
-                    disabled={form.watch("isAnonymous")}
+                    disabled={!!form.watch("isAnonymous")}
                     className="mt-1"
                   />
                   {form.formState.errors.name && (
-                    <p className="text-sm text-red-600 mt-1">{form.formState.errors.name.message}</p>
+                    <p className="text-sm text-red-600 mt-1">
+                      {form.formState.errors.name.message}
+                    </p>
                   )}
                 </div>
                 <div>
@@ -102,18 +116,24 @@ export default function Feedback() {
                     type="email"
                     {...form.register("email")}
                     placeholder="your.email@science.pdn.ac.lk"
-                    disabled={form.watch("isAnonymous")}
+                    disabled={!!form.watch("isAnonymous")}
                     className="mt-1"
                   />
                   {form.formState.errors.email && (
-                    <p className="text-sm text-red-600 mt-1">{form.formState.errors.email.message}</p>
+                    <p className="text-sm text-red-600 mt-1">
+                      {form.formState.errors.email.message}
+                    </p>
                   )}
                 </div>
               </div>
 
               <div>
                 <Label htmlFor="feedbackType">Feedback Type</Label>
-                <Select onValueChange={(value) => form.setValue("feedbackType", value)}>
+                <Select
+                  onValueChange={(value) =>
+                    form.setValue("feedbackType", value)
+                  }
+                >
                   <SelectTrigger className="mt-1">
                     <SelectValue placeholder="Select feedback type" />
                   </SelectTrigger>
@@ -125,7 +145,9 @@ export default function Feedback() {
                   </SelectContent>
                 </Select>
                 {form.formState.errors.feedbackType && (
-                  <p className="text-sm text-red-600 mt-1">{form.formState.errors.feedbackType.message}</p>
+                  <p className="text-sm text-red-600 mt-1">
+                    {form.formState.errors.feedbackType.message}
+                  </p>
                 )}
               </div>
 
@@ -149,15 +171,19 @@ export default function Feedback() {
                   className="mt-1"
                 />
                 {form.formState.errors.message && (
-                  <p className="text-sm text-red-600 mt-1">{form.formState.errors.message.message}</p>
+                  <p className="text-sm text-red-600 mt-1">
+                    {form.formState.errors.message.message}
+                  </p>
                 )}
               </div>
 
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="anonymous"
-                  checked={form.watch("isAnonymous")}
-                  onCheckedChange={(checked) => form.setValue("isAnonymous", checked as boolean)}
+                  checked={!!form.watch("isAnonymous")}
+                  onCheckedChange={(checked) =>
+                    form.setValue("isAnonymous", checked as boolean)
+                  }
                 />
                 <Label htmlFor="anonymous" className="text-sm text-gray-600">
                   Submit anonymously
@@ -171,7 +197,7 @@ export default function Feedback() {
                   className="bg-forest text-white px-8 py-3 rounded-lg hover:bg-green-800 transition-colors font-semibold"
                 >
                   <Send className="h-4 w-4 mr-2" />
-                  {isSubmitting ? 'Submitting...' : 'Submit Feedback'}
+                  {isSubmitting ? "Submitting..." : "Submit Feedback"}
                 </Button>
               </div>
             </form>

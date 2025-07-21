@@ -1,4 +1,9 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MapPin, Clock, Info, Navigation } from "lucide-react";
@@ -20,20 +25,30 @@ interface LocationModalProps {
   onClose: () => void;
 }
 
-export default function LocationModal({ location, isOpen, onClose }: LocationModalProps) {
+export default function LocationModal({
+  location,
+  isOpen,
+  onClose,
+}: LocationModalProps) {
   const getDirections = () => {
     if (location) {
       const url = `https://www.google.com/maps/dir/?api=1&destination=${location.latitude},${location.longitude}`;
-      window.open(url, '_blank');
+      window.open(url, "_blank");
     }
   };
 
   const getBadgeVariant = (type: string) => {
-    switch(type) {
-      case 'recyclable': return 'default';
-      case 'organic': return 'secondary';
-      case 'general': return 'outline';
-      default: return 'default';
+    switch (type) {
+      case "general wastes":
+        return "outline";
+      case "chemical wastes":
+        return "destructive";
+      case "paper wastes":
+        return "secondary";
+      case "e wastes":
+        return "default";
+      default:
+        return "default";
     }
   };
 
@@ -48,7 +63,7 @@ export default function LocationModal({ location, isOpen, onClose }: LocationMod
             {location.name}
           </DialogTitle>
         </DialogHeader>
-        
+
         <div className="space-y-4">
           <div>
             <Badge variant={getBadgeVariant(location.type)} className="mb-2">
@@ -56,7 +71,7 @@ export default function LocationModal({ location, isOpen, onClose }: LocationMod
             </Badge>
             <p className="text-gray-600">{location.description}</p>
           </div>
-          
+
           <div className="space-y-2 text-sm text-gray-600">
             <div className="flex items-center">
               <Clock className="h-4 w-4 mr-2 text-forest" />
@@ -64,10 +79,14 @@ export default function LocationModal({ location, isOpen, onClose }: LocationMod
             </div>
             <div className="flex items-center">
               <Info className="h-4 w-4 mr-2 text-forest" />
-              <span>Capacity: {location.capacity.charAt(0).toUpperCase() + location.capacity.slice(1)}</span>
+              <span>
+                Capacity:{" "}
+                {location.capacity.charAt(0).toUpperCase() +
+                  location.capacity.slice(1)}
+              </span>
             </div>
           </div>
-          
+
           <Button
             onClick={getDirections}
             className="w-full bg-forest text-white hover:bg-green-800 transition-colors"

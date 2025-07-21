@@ -8,6 +8,7 @@ import {
   serial,
   decimal,
   boolean,
+  integer,
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -21,7 +22,7 @@ export const sessions = pgTable(
     sess: jsonb("sess").notNull(),
     expire: timestamp("expire").notNull(),
   },
-  (table) => [index("IDX_session_expire").on(table.expire)],
+  (table) => [index("IDX_session_expire").on(table.expire)]
 );
 
 // User storage table.
@@ -57,8 +58,8 @@ export const events = pgTable("events", {
   eventDate: timestamp("event_date").notNull(),
   location: text("location"),
   eventType: varchar("event_type", { length: 50 }).notNull(), // 'cleanup', 'workshop', 'competition'
-  maxParticipants: serial("max_participants"),
-  currentParticipants: serial("current_participants").default(0),
+  maxParticipants: integer("max_participants"),
+  currentParticipants: integer("current_participants").default(0),
   imageUrl: text("image_url"),
   isActive: boolean("is_active").default(true),
   createdAt: timestamp("created_at").defaultNow(),
@@ -81,7 +82,7 @@ export const feedback = pgTable("feedback", {
 
 export const stats = pgTable("stats", {
   id: serial("id").primaryKey(),
-  disposalPoints: serial("disposal_points").default(0),
+  disposalPoints: integer("disposal_points").default(0),
   monthlyWaste: text("monthly_waste").default("0T"),
   recyclableRate: text("recyclable_rate").default("0%"),
   activeUsers: text("active_users").default("0"),
@@ -89,7 +90,9 @@ export const stats = pgTable("stats", {
 });
 
 // Insert schemas
-export const insertDisposalLocationSchema = createInsertSchema(disposalLocations).omit({
+export const insertDisposalLocationSchema = createInsertSchema(
+  disposalLocations
+).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
@@ -119,7 +122,9 @@ export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
 
 export type DisposalLocation = typeof disposalLocations.$inferSelect;
-export type InsertDisposalLocation = z.infer<typeof insertDisposalLocationSchema>;
+export type InsertDisposalLocation = z.infer<
+  typeof insertDisposalLocationSchema
+>;
 
 export type Event = typeof events.$inferSelect;
 export type InsertEvent = z.infer<typeof insertEventSchema>;

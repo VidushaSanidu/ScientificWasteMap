@@ -265,6 +265,37 @@ export default function Admin() {
     },
   });
 
+  const deleteEventMutation = useMutation({
+    mutationFn: async (eventId: number) => {
+      await apiRequest("DELETE", `/api/events/${eventId}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/events"] });
+      toast({
+        title: "Success",
+        description: "Event deleted successfully.",
+      });
+    },
+    onError: (error) => {
+      if (isUnauthorizedError(error as Error)) {
+        toast({
+          title: "Unauthorized",
+          description: "You are logged out. Logging in again...",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 500);
+        return;
+      }
+      toast({
+        title: "Error",
+        description: "Failed to delete event.",
+        variant: "destructive",
+      });
+    },
+  });
+
   const updateStatsMutation = useMutation({
     mutationFn: async (statsData: any) => {
       await apiRequest("PUT", "/api/stats", statsData);
@@ -753,6 +784,18 @@ export default function Admin() {
                               at {event.location}
                             </p>
                           </div>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => deleteEventMutation.mutate(event.id)}
+                            disabled={deleteEventMutation.isPending}
+                          >
+                            {deleteEventMutation.isPending ? (
+                              "Deleting..."
+                            ) : (
+                              <Trash2 className="h-4 w-4" />
+                            )}
+                          </Button>
                         </div>
                       </div>
                     ))}

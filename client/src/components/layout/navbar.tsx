@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Settings, LogOut, User } from "lucide-react";
+import { Menu, X, Settings, LogOut, User, LogIn } from "lucide-react";
 import { Link } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -88,11 +88,18 @@ export default function Navbar({ showAdminButton }: NavbarProps) {
                   </Button>
                 </Link>
               )}
-              {isAuthenticated && (
+              {isAuthenticated ? (
                 <Button onClick={logout} variant="outline">
                   <LogOut className="h-4 w-4 mr-2" />
                   Logout
                 </Button>
+              ) : (
+                <Link href="/auth">
+                  <Button variant="outline" className="hidden md:inline-flex">
+                    <LogIn className="h-4 w-4 mr-2" />
+                    Login
+                  </Button>
+                </Link>
               )}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -174,7 +181,7 @@ export default function Navbar({ showAdminButton }: NavbarProps) {
                     </Link>
                   )}
 
-                {isAuthenticated && (
+                {isAuthenticated ? (
                   <button
                     onClick={() => {
                       logout();
@@ -185,6 +192,16 @@ export default function Navbar({ showAdminButton }: NavbarProps) {
                     <LogOut className="h-4 w-4 mr-2 inline" />
                     Logout
                   </button>
+                ) : (
+                  <Link href="/auth">
+                    <button
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="block w-full text-left py-2 text-forest hover:text-green-800 font-medium"
+                    >
+                      <LogIn className="h-4 w-4 mr-2 inline" />
+                      Login
+                    </button>
+                  </Link>
                 )}
               </nav>
             </div>

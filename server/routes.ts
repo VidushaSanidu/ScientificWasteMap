@@ -26,33 +26,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
   }
 
   // New Authentication Routes
-  app.post("/api/auth/register", async (req, res) => {
-    try {
-      const { email, password, firstName, lastName } = req.body;
+  // Registration endpoint disabled - login only
+  // app.post("/api/auth/register", async (req, res) => {
+  //   try {
+  //     const { email, password, firstName, lastName } = req.body;
 
-      if (!email || !password) {
-        return res
-          .status(400)
-          .json({ message: "Email and password are required" });
-      }
+  //     if (!email || !password) {
+  //       return res
+  //         .status(400)
+  //         .json({ message: "Email and password are required" });
+  //     }
 
-      const result = await authService.register({
-        email,
-        password,
-        firstName,
-        lastName,
-      });
+  //     const result = await authService.register({
+  //       email,
+  //       password,
+  //       firstName,
+  //       lastName,
+  //     });
 
-      const { password: _, ...userWithoutPassword } = result.user;
-      res.status(201).json({
-        user: userWithoutPassword,
-        token: result.token,
-      });
-    } catch (error: any) {
-      console.error("Registration error:", error);
-      res.status(400).json({ message: error.message || "Registration failed" });
-    }
-  });
+  //     const { password: _, ...userWithoutPassword } = result.user;
+  //     res.status(201).json({
+  //       user: userWithoutPassword,
+  //       token: result.token,
+  //     });
+  //   } catch (error: any) {
+  //     console.error("Registration error:", error);
+  //     res.status(400).json({ message: error.message || "Registration failed" });
+  //   }
+  // });
 
   app.post("/api/auth/login", async (req, res) => {
     try {

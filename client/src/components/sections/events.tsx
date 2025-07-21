@@ -10,11 +10,9 @@ import {
   Sprout,
   Lightbulb,
   Heart,
-  Trash2,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { useAuth } from "@/hooks/useAuth";
 
 interface Event {
   id: number;
@@ -30,7 +28,6 @@ interface Event {
 export default function Events() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const { user, isAdmin } = useAuth();
 
   const { data: events, isLoading } = useQuery<Event[]>({
     queryKey: ["/api/events"],
@@ -52,26 +49,6 @@ export default function Events() {
       toast({
         title: "Error",
         description: "Failed to join event. It may be full or unavailable.",
-        variant: "destructive",
-      });
-    },
-  });
-
-  const deleteEventMutation = useMutation({
-    mutationFn: async (eventId: number) => {
-      await apiRequest("DELETE", `/api/events/${eventId}`);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/events"] });
-      toast({
-        title: "Success",
-        description: "Event has been deleted successfully!",
-      });
-    },
-    onError: (error) => {
-      toast({
-        title: "Error",
-        description: "Failed to delete event. Please try again.",
         variant: "destructive",
       });
     },
@@ -215,21 +192,6 @@ export default function Events() {
                           ? "Participate"
                           : "Join Event"}
                       </Button>
-                      {isAdmin && (
-                        <Button
-                          onClick={() => deleteEventMutation.mutate(event.id)}
-                          disabled={deleteEventMutation.isPending}
-                          variant="destructive"
-                          size="sm"
-                          className="text-xs"
-                        >
-                          {deleteEventMutation.isPending ? (
-                            "Deleting..."
-                          ) : (
-                            <Trash2 className="h-4 w-4" />
-                          )}
-                        </Button>
-                      )}
                     </div>
                   </div>
                 </CardContent>

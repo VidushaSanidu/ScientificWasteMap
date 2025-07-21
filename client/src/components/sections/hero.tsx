@@ -42,16 +42,6 @@ export default function Hero() {
               <BookOpen className="h-5 w-5 mr-2 " />
               Learn More
             </Button>
-            <Link href="/auth">
-              <Button
-                variant="outline"
-                className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-forest transition-colors"
-                size="lg"
-              >
-                <LogIn className="h-5 w-5 mr-2" />
-                Login / Register
-              </Button>
-            </Link>
           </div>
         </div>
       </div>

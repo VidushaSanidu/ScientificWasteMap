@@ -41,11 +41,31 @@ app.use((req, res, next) => {
 registerRoutes(app);
 
 // Error handler
-app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+app.use((err: any, req: Request, res: Response, _next: NextFunction) => {
   const status = err.status || err.statusCode || 500;
   const message = err.message || "Internal Server Error";
-  console.error(err);
-  res.status(status).json({ message });
+
+  // Log error details for debugging
+  console.error("API Error:", {
+    path: req.path,
+    method: req.method,
+    status,
+    message,
+    stack: err.stack,
+    body: req.body,
+    timestamp: new Date().toISOString(),
+  });
+
+  // Return appropriate error response
+  if (status === 500) {
+    res.status(status).json({
+      message: "Internal server error",
+      error: process.env.NODE_ENV === "development" ? message : undefined,
+      timestamp: new Date().toISOString(),
+    });
+  } else {
+    res.status(status).json({ message });
+  }
 });
 
 // For Vercel deployment, we don't need to listen on a port

@@ -7,7 +7,14 @@ import * as schema from "@shared/schema";
 // Load environment variables
 dotenv.config();
 
-neonConfig.webSocketConstructor = ws;
+// Configure Neon for serverless environments
+if (typeof window === "undefined") {
+  // Only set WebSocket constructor in Node.js environment
+  neonConfig.webSocketConstructor = ws;
+}
+
+// Configure connection pooling for serverless
+neonConfig.poolQueryViaFetch = true;
 
 if (!process.env.DATABASE_URL) {
   throw new Error(
@@ -15,5 +22,12 @@ if (!process.env.DATABASE_URL) {
   );
 }
 
-export const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+// Create connection pool with serverless-optimized settings
+export const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  max: 1, // Limit connections in serverless environment
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 5000,
+});
+
 export const db = drizzle({ client: pool, schema });

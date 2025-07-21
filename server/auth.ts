@@ -29,6 +29,13 @@ export class AuthService {
     this.jwtSecret =
       process.env.JWT_SECRET || "fallback-secret-change-in-production";
     this.jwtExpiresIn = process.env.JWT_EXPIRES_IN || "7d";
+
+    // Warn if using fallback secret in production
+    if (!process.env.JWT_SECRET && process.env.NODE_ENV === "production") {
+      console.warn(
+        "WARNING: Using fallback JWT secret in production! Set JWT_SECRET environment variable."
+      );
+    }
   }
 
   async hashPassword(password: string): Promise<string> {
@@ -95,29 +102,49 @@ export class AuthService {
   async login(
     credentials: LoginCredentials
   ): Promise<{ user: User; token: string }> {
-    // Find user by email
-    const user = await storage.getUserByEmail(credentials.email);
-    if (!user || !user.password) {
-      throw new Error("Invalid email or password");
+    try {
+      console.log(
+        "AuthService: Starting login process for:",
+        credentials.email
+      );
+
+      // Find user by email
+      const user = await storage.getUserByEmail(credentials.email);
+      if (!user || !user.password) {
+        console.log(
+          "AuthService: User not found or no password set for:",
+          credentials.email
+        );
+        throw new Error("Invalid email or password");
+      }
+
+      console.log("AuthService: User found, checking password");
+
+      // Check password
+      const isValidPassword = await this.comparePassword(
+        credentials.password,
+        user.password
+      );
+      if (!isValidPassword) {
+        console.log("AuthService: Invalid password for:", credentials.email);
+        throw new Error("Invalid email or password");
+      }
+
+      console.log("AuthService: Password valid, generating token");
+
+      // Generate token
+      const token = this.generateToken({
+        userId: user.id,
+        email: user.email!,
+        role: user.role!,
+      });
+
+      console.log("AuthService: Login successful for:", credentials.email);
+      return { user, token };
+    } catch (error) {
+      console.error("AuthService: Login error:", error);
+      throw error;
     }
-
-    // Check password
-    const isValidPassword = await this.comparePassword(
-      credentials.password,
-      user.password
-    );
-    if (!isValidPassword) {
-      throw new Error("Invalid email or password");
-    }
-
-    // Generate token
-    const token = this.generateToken({
-      userId: user.id,
-      email: user.email!,
-      role: user.role!,
-    });
-
-    return { user, token };
   }
 
   async createAdminUser(): Promise<User> {

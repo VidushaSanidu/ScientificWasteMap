@@ -18,6 +18,36 @@ import {
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Health check endpoint
+  app.get("/api/health", async (req, res) => {
+    try {
+      console.log("Health check requested");
+
+      // Check database connection
+      const testUser = await storage.getUserByEmail("test@example.com");
+
+      const healthStatus = {
+        status: "ok",
+        timestamp: new Date().toISOString(),
+        database: "connected",
+        environment: process.env.NODE_ENV || "unknown",
+        hasJwtSecret: !!process.env.JWT_SECRET,
+        hasDatabaseUrl: !!process.env.DATABASE_URL,
+      };
+
+      console.log("Health check successful:", healthStatus);
+      res.json(healthStatus);
+    } catch (error) {
+      console.error("Health check failed:", error);
+      res.status(500).json({
+        status: "error",
+        timestamp: new Date().toISOString(),
+        error: error instanceof Error ? error.message : "Unknown error",
+        database: "disconnected",
+      });
+    }
+  });
+
   // Initialize admin user on startup
   try {
     await authService.createAdminUser();
@@ -57,24 +87,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/auth/login", async (req, res) => {
     try {
+      console.log("Login attempt started for:", req.body.email);
+
       const { email, password } = req.body;
 
       if (!email || !password) {
+        console.log("Login failed: missing email or password");
         return res
           .status(400)
           .json({ message: "Email and password are required" });
       }
 
+      console.log("Attempting to authenticate user:", email);
       const result = await authService.login({ email, password });
 
       const { password: _, ...userWithoutPassword } = result.user;
+      console.log("Login successful for user:", email);
+
       res.json({
         user: userWithoutPassword,
         token: result.token,
       });
     } catch (error: any) {
-      console.error("Login error:", error);
-      res.status(401).json({ message: error.message || "Login failed" });
+      console.error("Login error details:", {
+        message: error.message,
+        stack: error.stack,
+        name: error.name,
+        email: req.body?.email,
+      });
+
+      // Return a more specific error message based on the error type
+      if (
+        error.message &&
+        error.message.includes("Invalid email or password")
+      ) {
+        res.status(401).json({ message: "Invalid email or password" });
+      } else if (error.message && error.message.includes("database")) {
+        console.error("Database connection error during login");
+        res
+          .status(500)
+          .json({ message: "Database connection error. Please try again." });
+      } else {
+        res.status(500).json({
+          message:
+            "An unexpected error occurred during login. Please try again.",
+          error:
+            process.env.NODE_ENV === "development" ? error.message : undefined,
+        });
+      }
     }
   });
 

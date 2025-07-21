@@ -13,7 +13,7 @@ export default function Navbar({ showAdminButton }: NavbarProps) {
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({ behavior: "smooth" });
     }
     setIsMobileMenuOpen(false);
   };
@@ -25,48 +25,56 @@ export default function Navbar({ showAdminButton }: NavbarProps) {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
               <div className="flex-shrink-0">
-                <h1 className="text-2xl font-bold text-forest">UoP Science</h1>
-                <p className="text-xs text-university">Waste Management Portal</p>
+                <h1 className="text-2xl font-bold text-forest">TRASH TRACK</h1>
+                <p className="text-xs font-semibold  text-university">
+                  Waste Management Portal |{" "}
+                  <span className="font-semibold text-red-700">
+                    University of Peradeniya
+                  </span>
+                </p>
               </div>
             </div>
-            
+
             <nav className="hidden md:flex space-x-8">
-              <button 
-                onClick={() => scrollToSection('home')} 
+              <button
+                onClick={() => scrollToSection("home")}
                 className="text-text-dark hover:text-forest font-medium transition-colors"
               >
                 Home
               </button>
-              <button 
-                onClick={() => scrollToSection('map')} 
+              <button
+                onClick={() => scrollToSection("map")}
                 className="text-text-dark hover:text-forest font-medium transition-colors"
               >
                 Map
               </button>
-              <button 
-                onClick={() => scrollToSection('info')} 
+              <button
+                onClick={() => scrollToSection("info")}
                 className="text-text-dark hover:text-forest font-medium transition-colors"
               >
                 Information
               </button>
-              <button 
-                onClick={() => scrollToSection('events')} 
+              <button
+                onClick={() => scrollToSection("events")}
                 className="text-text-dark hover:text-forest font-medium transition-colors"
               >
                 Events
               </button>
-              <button 
-                onClick={() => scrollToSection('feedback')} 
+              <button
+                onClick={() => scrollToSection("feedback")}
                 className="text-text-dark hover:text-forest font-medium transition-colors"
               >
                 Feedback
               </button>
             </nav>
-            
+
             <div className="flex items-center space-x-4">
               {showAdminButton && (
                 <Link href="/admin">
-                  <Button variant="outline" className="hidden md:inline-flex border-university text-university hover:bg-university hover:text-white">
+                  <Button
+                    variant="outline"
+                    className="hidden md:inline-flex border-university text-university hover:bg-university hover:text-white"
+                  >
                     <Settings className="h-4 w-4 mr-2" />
                     Admin
                   </Button>
@@ -99,31 +107,31 @@ export default function Navbar({ showAdminButton }: NavbarProps) {
               </div>
               <nav className="space-y-4">
                 <button
-                  onClick={() => scrollToSection('home')}
+                  onClick={() => scrollToSection("home")}
                   className="block w-full text-left py-2 text-text-dark hover:text-forest font-medium"
                 >
                   Home
                 </button>
                 <button
-                  onClick={() => scrollToSection('map')}
+                  onClick={() => scrollToSection("map")}
                   className="block w-full text-left py-2 text-text-dark hover:text-forest font-medium"
                 >
                   Map
                 </button>
                 <button
-                  onClick={() => scrollToSection('info')}
+                  onClick={() => scrollToSection("info")}
                   className="block w-full text-left py-2 text-text-dark hover:text-forest font-medium"
                 >
                   Information
                 </button>
                 <button
-                  onClick={() => scrollToSection('events')}
+                  onClick={() => scrollToSection("events")}
                   className="block w-full text-left py-2 text-text-dark hover:text-forest font-medium"
                 >
                   Events
                 </button>
                 <button
-                  onClick={() => scrollToSection('feedback')}
+                  onClick={() => scrollToSection("feedback")}
                   className="block w-full text-left py-2 text-text-dark hover:text-forest font-medium"
                 >
                   Feedback

@@ -50,6 +50,20 @@ export default function InteractiveMap() {
         link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
         document.head.appendChild(link);
 
+        // Add custom CSS for markers
+        const style = document.createElement("style");
+        style.textContent = `
+          .custom-marker {
+            background: transparent !important;
+            border: none !important;
+          }
+          .leaflet-div-icon {
+            background: transparent !important;
+            border: none !important;
+          }
+        `;
+        document.head.appendChild(style);
+
         // Load JS
         const script = document.createElement("script");
         script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
@@ -120,7 +134,53 @@ export default function InteractiveMap() {
 
     if (isNaN(lat) || isNaN(lng)) return;
 
-    const marker = L.marker([lat, lng])
+    // Create custom colored marker based on waste type
+    const getMarkerColorHex = (type: string) => {
+      switch (type) {
+        case "general wastes":
+          return "#6B7280"; // gray-500
+        case "chemical wastes":
+          return "#DC2626"; // red-600
+        case "paper wastes":
+          return "#2563EB"; // blue-600
+        case "e wastes":
+          return "#9333EA"; // purple-600
+        default:
+          return "#059669"; // emerald-600 (forest green)
+      }
+    };
+
+    const markerColor = getMarkerColorHex(location.type);
+
+    // Create custom icon with colored circle
+    const customIcon = L.divIcon({
+      className: "custom-marker",
+      html: `
+        <div style="
+          width: 25px;
+          height: 25px;
+          border-radius: 50%;
+          background-color: ${markerColor};
+          border: 3px solid white;
+          box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        ">
+          <div style="
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: white;
+          "></div>
+        </div>
+      `,
+      iconSize: [25, 25],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -12],
+    });
+
+    const marker = L.marker([lat, lng], { icon: customIcon })
       .bindPopup(
         `
         <div style="padding: 8px;">
@@ -130,6 +190,11 @@ export default function InteractiveMap() {
           <p style="font-size: 14px; color: #666; margin-bottom: 8px;">${
             location.description || ""
           }</p>
+          <div style="margin-bottom: 8px;">
+            <span style="background-color: ${markerColor}; color: white; padding: 2px 6px; border-radius: 12px; font-size: 11px; text-transform: capitalize;">
+              ${location.type}
+            </span>
+          </div>
           <button onclick="window.showLocationDetails(${location.id})" 
                   style="background: #1B5E20; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 12px; cursor: pointer;">
             View Details

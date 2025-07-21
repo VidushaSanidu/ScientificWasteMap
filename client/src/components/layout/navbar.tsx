@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Settings } from "lucide-react";
+import { Menu, X, Settings, LogOut, User } from "lucide-react";
 import { Link } from "wouter";
+import { useAuth } from "@/hooks/useAuth";
 
 interface NavbarProps {
   showAdminButton: boolean;
@@ -9,6 +10,7 @@ interface NavbarProps {
 
 export default function Navbar({ showAdminButton }: NavbarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user, isAuthenticated, logout } = useAuth();
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -69,7 +71,13 @@ export default function Navbar({ showAdminButton }: NavbarProps) {
             </nav>
 
             <div className="flex items-center space-x-4">
-              {showAdminButton && (
+              {isAuthenticated && user && (
+                <div className="hidden md:flex items-center space-x-2 text-sm text-text-dark">
+                  <User className="h-4 w-4" />
+                  <span>{user.firstName || user.email}</span>
+                </div>
+              )}
+              {showAdminButton && isAuthenticated && user?.role === "admin" && (
                 <Link href="/admin">
                   <Button
                     variant="outline"
@@ -79,6 +87,12 @@ export default function Navbar({ showAdminButton }: NavbarProps) {
                     Admin
                   </Button>
                 </Link>
+              )}
+              {isAuthenticated && (
+                <Button onClick={logout} variant="outline">
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Logout
+                </Button>
               )}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -136,16 +150,41 @@ export default function Navbar({ showAdminButton }: NavbarProps) {
                 >
                   Feedback
                 </button>
-                {showAdminButton && (
-                  <Link href="/admin">
-                    <button
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="block w-full text-left py-2 text-university hover:text-forest font-medium"
-                    >
-                      <Settings className="h-4 w-4 mr-2 inline" />
-                      Admin Panel
-                    </button>
-                  </Link>
+
+                {isAuthenticated && user && (
+                  <div className="border-t pt-4 mt-4">
+                    <div className="flex items-center space-x-2 py-2 text-sm text-text-dark">
+                      <User className="h-4 w-4" />
+                      <span>{user.firstName || user.email}</span>
+                    </div>
+                  </div>
+                )}
+
+                {showAdminButton &&
+                  isAuthenticated &&
+                  user?.role === "admin" && (
+                    <Link href="/admin">
+                      <button
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="block w-full text-left py-2 text-university hover:text-forest font-medium"
+                      >
+                        <Settings className="h-4 w-4 mr-2 inline" />
+                        Admin Panel
+                      </button>
+                    </Link>
+                  )}
+
+                {isAuthenticated && (
+                  <button
+                    onClick={() => {
+                      logout();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="block w-full text-left py-2 text-red-600 hover:text-red-800 font-medium"
+                  >
+                    <LogOut className="h-4 w-4 mr-2 inline" />
+                    Logout
+                  </button>
                 )}
               </nav>
             </div>

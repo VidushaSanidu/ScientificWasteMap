@@ -23,6 +23,10 @@ In your Vercel dashboard, you'll need to configure the following environment var
 
 - `DATABASE_URL` - Your Neon database connection string
 - `SESSION_SECRET` - A secure random string for session encryption
+- `JWT_SECRET` - A secure random string for JWT token signing
+- `JWT_EXPIRES_IN` - Token expiration time (e.g., "7d" for 7 days)
+- `ADMIN_EMAIL` - Email for the default admin account
+- `ADMIN_PASSWORD` - Password for the default admin account
 - `NODE_ENV` - Set to "production"
 
 ### Optional Variables (if using Replit Auth):

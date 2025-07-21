@@ -10,17 +10,39 @@ async function throwIfResNotOk(res: Response) {
 export async function apiRequest(
   method: string,
   url: string,
-  data?: unknown | undefined,
+  data?: unknown | undefined
 ): Promise<Response> {
+  const headers: Record<string, string> = {};
+
+  if (data) {
+    headers["Content-Type"] = "application/json";
+  }
+
+  // Add JWT token if available
+  const token = localStorage.getItem("authToken");
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
   const res = await fetch(url, {
     method,
-    headers: data ? { "Content-Type": "application/json" } : {},
+    headers,
     body: data ? JSON.stringify(data) : undefined,
     credentials: "include",
   });
 
   await throwIfResNotOk(res);
   return res;
+}
+
+// Helper function for API requests that return JSON
+export async function apiRequestJson<T = any>(
+  method: string,
+  url: string,
+  data?: unknown | undefined
+): Promise<T> {
+  const response = await apiRequest(method, url, data);
+  return response.json();
 }
 
 type UnauthorizedBehavior = "returnNull" | "throw";

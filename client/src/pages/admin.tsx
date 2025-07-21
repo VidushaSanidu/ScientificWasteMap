@@ -234,7 +234,8 @@ export default function Admin() {
         description: "Event created successfully.",
       });
     },
-    onError: (error) => {
+    onError: (error: any) => {
+      console.error("Event creation error:", error);
       if (isUnauthorizedError(error as Error)) {
         toast({
           title: "Unauthorized",
@@ -246,9 +247,19 @@ export default function Admin() {
         }, 500);
         return;
       }
+      // Try to extract more specific error message
+      let errorMessage = "Failed to create event.";
+      if (error.message && error.message.includes("Invalid data")) {
+        errorMessage = "Please check all required fields and try again.";
+      }
+      if (error.response?.data?.errors) {
+        errorMessage = `Validation errors: ${error.response.data.errors
+          .map((e: any) => e.message)
+          .join(", ")}`;
+      }
       toast({
         title: "Error",
-        description: "Failed to create event.",
+        description: errorMessage,
         variant: "destructive",
       });
     },
@@ -686,12 +697,19 @@ export default function Admin() {
                   />
                 </div>
                 <Button
-                  onClick={() =>
-                    createEventMutation.mutate({
-                      ...newEvent,
+                  onClick={() => {
+                    console.log("Form data:", newEvent);
+                    const eventData = {
+                      title: newEvent.title,
+                      description: newEvent.description || null,
                       eventDate: new Date(newEvent.eventDate).toISOString(),
-                    })
-                  }
+                      location: newEvent.location || null,
+                      eventType: newEvent.eventType,
+                      maxParticipants: newEvent.maxParticipants || null,
+                    };
+                    console.log("Sending data:", eventData);
+                    createEventMutation.mutate(eventData);
+                  }}
                   disabled={
                     createEventMutation.isPending ||
                     !newEvent.title ||

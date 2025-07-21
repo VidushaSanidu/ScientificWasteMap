@@ -1,10 +1,18 @@
-import { Facebook, Twitter, Instagram, Linkedin, MapPin, Phone, Mail } from "lucide-react";
+import {
+  Facebook,
+  Twitter,
+  Instagram,
+  Linkedin,
+  MapPin,
+  Phone,
+  Mail,
+} from "lucide-react";
 
 export default function Footer() {
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -16,32 +24,33 @@ export default function Footer() {
           <div>
             <h3 className="text-xl font-bold mb-4">UoP Science Faculty</h3>
             <p className="text-gray-300 mb-4">
-              Leading sustainable waste management practices for a cleaner, greener campus environment.
+              Leading sustainable waste management practices for a cleaner,
+              greener University environment.
             </p>
             <div className="flex space-x-4">
-              <a 
-                href="#" 
+              <a
+                href="#"
                 className="text-gray-300 hover:text-white transition-colors"
                 aria-label="Facebook"
               >
                 <Facebook className="h-5 w-5" />
               </a>
-              <a 
-                href="#" 
+              <a
+                href="#"
                 className="text-gray-300 hover:text-white transition-colors"
                 aria-label="Twitter"
               >
                 <Twitter className="h-5 w-5" />
               </a>
-              <a 
-                href="#" 
+              <a
+                href="#"
                 className="text-gray-300 hover:text-white transition-colors"
                 aria-label="Instagram"
               >
                 <Instagram className="h-5 w-5" />
               </a>
-              <a 
-                href="#" 
+              <a
+                href="#"
                 className="text-gray-300 hover:text-white transition-colors"
                 aria-label="LinkedIn"
               >
@@ -55,40 +64,40 @@ export default function Footer() {
             <h4 className="font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2 text-gray-300">
               <li>
-                <button 
-                  onClick={() => scrollToSection('home')} 
+                <button
+                  onClick={() => scrollToSection("home")}
                   className="hover:text-white transition-colors text-left"
                 >
                   Home
                 </button>
               </li>
               <li>
-                <button 
-                  onClick={() => scrollToSection('map')} 
+                <button
+                  onClick={() => scrollToSection("map")}
                   className="hover:text-white transition-colors text-left"
                 >
-                  Campus Map
+                  University Map
                 </button>
               </li>
               <li>
-                <button 
-                  onClick={() => scrollToSection('info')} 
+                <button
+                  onClick={() => scrollToSection("info")}
                   className="hover:text-white transition-colors text-left"
                 >
                   Information
                 </button>
               </li>
               <li>
-                <button 
-                  onClick={() => scrollToSection('events')} 
+                <button
+                  onClick={() => scrollToSection("events")}
                   className="hover:text-white transition-colors text-left"
                 >
                   Events
                 </button>
               </li>
               <li>
-                <button 
-                  onClick={() => scrollToSection('feedback')} 
+                <button
+                  onClick={() => scrollToSection("feedback")}
                   className="hover:text-white transition-colors text-left"
                 >
                   Feedback
@@ -108,7 +117,7 @@ export default function Footer() {
               </li>
               <li>
                 <a href="#" className="hover:text-white transition-colors">
-                  Campus Policies
+                  University Policies
                 </a>
               </li>
               <li>
@@ -151,7 +160,10 @@ export default function Footer() {
 
         {/* Copyright */}
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
-          <p>&copy; 2024 Faculty of Science, University of Peradeniya. All rights reserved.</p>
+          <p>
+            &copy; 2024 Faculty of Science, University of Peradeniya. All rights
+            reserved.
+          </p>
         </div>
       </div>
     </footer>

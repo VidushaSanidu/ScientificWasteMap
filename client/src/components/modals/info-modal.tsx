@@ -32,7 +32,7 @@ const infoContent = {
             1. Waste Segregation and Collection
           </h4>
           <ul className="list-disc list-inside mb-3 space-y-1 text-gray-600">
-            <li>80 satellite waste storage points across campus</li>
+            <li>80 satellite waste storage points across University</li>
             <li>Initial segregation handled by Waste Management Division</li>
             <li>Faculty-specific storage points (e.g., Faculty of Science)</li>
           </ul>
@@ -44,7 +44,7 @@ const infoContent = {
           </h4>
           <ul className="list-disc list-inside mb-3 space-y-1 text-gray-600">
             <li>1 Lorry for daily collection</li>
-            <li>1 Tractor for campus transport</li>
+            <li>1 Tractor for University transport</li>
             <li>1 Compactor vehicle (operates Tuesdays & Thursdays)</li>
             <li>Collection schedule: 5 days per week</li>
           </ul>

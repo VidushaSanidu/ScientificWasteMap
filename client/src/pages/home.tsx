@@ -14,12 +14,16 @@ export default function Home() {
     document.title = "Home - UoP Science Faculty Waste Management Portal";
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
-      metaDescription.setAttribute('content', 'Access your personalized waste management dashboard. Manage disposal locations, track environmental impact, and stay updated on campus sustainability initiatives.');
+      metaDescription.setAttribute(
+        "content",
+        "Access your personalized waste management dashboard. Manage disposal locations, track environmental impact, and stay updated on University sustainability initiatives."
+      );
     } else {
-      const meta = document.createElement('meta');
-      meta.name = 'description';
-      meta.content = 'Access your personalized waste management dashboard. Manage disposal locations, track environmental impact, and stay updated on campus sustainability initiatives.';
-      document.getElementsByTagName('head')[0].appendChild(meta);
+      const meta = document.createElement("meta");
+      meta.name = "description";
+      meta.content =
+        "Access your personalized waste management dashboard. Manage disposal locations, track environmental impact, and stay updated on University sustainability initiatives.";
+      document.getElementsByTagName("head")[0].appendChild(meta);
     }
   }, []);
 

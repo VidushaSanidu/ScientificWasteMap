@@ -33,6 +33,7 @@ export const users = pgTable("users", {
   firstName: varchar("first_name"),
   lastName: varchar("last_name"),
   profileImageUrl: varchar("profile_image_url"),
+  role: varchar("role", { length: 20 }).default("user"), // 'user', 'admin'
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -98,10 +99,18 @@ export const insertDisposalLocationSchema = createInsertSchema(
   updatedAt: true,
 });
 
-export const insertEventSchema = createInsertSchema(events).omit({
+export const insertEventSchema = createInsertSchema(events, {
+  eventDate: z
+    .string()
+    .datetime()
+    .transform((val) => new Date(val)), // Convert string to Date
+  eventType: z.enum(["cleanup", "workshop", "competition"]),
+  maxParticipants: z.number().int().positive().optional(),
+}).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+  currentParticipants: true, // This should be set by the server, not client
 });
 
 export const insertFeedbackSchema = createInsertSchema(feedback).omit({

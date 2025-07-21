@@ -26,9 +26,9 @@ export default function Navbar({ showAdminButton }: NavbarProps) {
             <div className="flex items-center space-x-4">
               <div className="flex-shrink-0">
                 <h1 className="text-2xl font-bold text-forest">TRASH TRACK</h1>
-                <p className="text-xs font-semibold  text-university">
+                <p className="text-xs font-semibold  text-text-dark">
                   Waste Management Portal |{" "}
-                  <span className="font-semibold text-red-700">
+                  <span className="font-semibold">
                     University of Peradeniya
                   </span>
                 </p>
@@ -73,7 +73,7 @@ export default function Navbar({ showAdminButton }: NavbarProps) {
                 <Link href="/admin">
                   <Button
                     variant="outline"
-                    className="hidden md:inline-flex border-university text-university hover:bg-university hover:text-white"
+                    className="hidden md:inline-flex border-green-800 text-gray-800 hover:bg-green-800 hover:text-white"
                   >
                     <Settings className="h-4 w-4 mr-2" />
                     Admin

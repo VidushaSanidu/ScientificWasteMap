@@ -31,167 +31,198 @@ export default function Information() {
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Learn best practices and guidelines for sustainable waste
-              management on campus
+              management on University
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-            {/* University Waste Management System Card */}
-            <Card className="bg-bg-light hover:shadow-lg transition-shadow">
-              <CardContent className="p-8">
-                <img
-                  src="https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600"
-                  alt="University waste management facility and operations"
-                  className="rounded-lg mb-6 w-full h-48 object-cover"
-                />
-                <div className="text-center">
-                  <div className="bg-blue-600 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Building2 className="h-8 w-8" />
+          {/* University Waste Management System - Full Width Featured Section */}
+          <div className="mb-16">
+            <Card className="bg-gradient-to-br from-gray-100 to-gray-200 border-2 border-gray-200 hover:shadow-xl transition-all duration-300">
+              <CardContent className="p-12">
+                <div className="grid lg:grid-cols-2 gap-12 items-center">
+                  <div>
+                    <div className="flex items-center mb-6">
+                      <div className="bg-yellow-500 text-white w-20 h-20 rounded-full flex items-center justify-center mr-6">
+                        <Building2 className="h-10 w-10" />
+                      </div>
+                      <div>
+                        <h3 className="text-3xl font-bold text-text-dark mb-2">
+                          University Waste Management System
+                        </h3>
+                        <p className="text-gray-500 font-semibold text-lg">
+                          University of Peradeniya
+                        </p>
+                      </div>
+                    </div>
+                    <p className="text-gray-700 text-lg leading-relaxed mb-8">
+                      Discover the comprehensive waste management system at the
+                      University of Peradeniya. Our integrated approach covers
+                      collection, processing, and disposal methods designed for
+                      educational institutions. Learn about our sustainable
+                      practices, waste reduction initiatives, and how we manage
+                      diverse waste streams across University facilities.
+                    </p>
+                    <Button
+                      onClick={() => showInfoModal("university")}
+                      className="bg-yellow-500 text-gray-800 hover:bg-yellow-600 transition-colors text-lg px-8 py-3"
+                    >
+                      Explore University System
+                    </Button>
                   </div>
-                  <h3 className="text-xl font-bold text-text-dark mb-4">
-                    University System
-                  </h3>
-                  <p className="text-gray-600 mb-6">
-                    Learn about the comprehensive waste management system at the
-                    University of Peradeniya, including collection, processing,
-                    and disposal methods.
-                  </p>
-                  <Button
-                    onClick={() => showInfoModal("university")}
-                    className="bg-blue-600 text-white hover:bg-blue-700 transition-colors"
-                  >
-                    Learn More
-                  </Button>
+                  <div>
+                    <img
+                      src="https://i.pinimg.com/736x/08/c9/03/08c9036921d9d670825e57d4805d8a5c.jpg"
+                      alt="University waste management facility and operations"
+                      className="rounded-xl w-full h-80 object-cover shadow-lg"
+                    />
+                  </div>
                 </div>
               </CardContent>
             </Card>
+          </div>
 
-            {/* Chemical Wastes Card */}
-            <Card className="bg-bg-light hover:shadow-lg transition-shadow">
-              <CardContent className="p-8">
-                <img
-                  src="https://images.unsplash.com/photo-1583947215259-38e31be8751f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600"
-                  alt="Chemical waste handling and laboratory safety"
-                  className="rounded-lg mb-6 w-full h-48 object-cover"
-                />
-                <div className="text-center">
-                  <div className="bg-red-600 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Recycle className="h-8 w-8" />
-                  </div>
-                  <h3 className="text-xl font-bold text-text-dark mb-4">
-                    Chemical Wastes
-                  </h3>
-                  <p className="text-gray-600 mb-6">
-                    Laboratory chemical waste requires special handling and
-                    disposal. Learn about proper containment, labeling, and
-                    disposal procedures for scientific waste materials.
-                  </p>
-                  <Button
-                    onClick={() => showInfoModal("chemical")}
-                    className="bg-red-600 text-white hover:bg-red-700 transition-colors"
-                  >
-                    Learn More
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+          {/* Other Waste Types Grid */}
+          <div className="mb-12">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-bold text-text-dark mb-2">
+                Waste Categories
+              </h3>
+              <p className="text-gray-600">
+                Specialized guidelines for different types of waste materials
+              </p>
+            </div>
 
-            {/* Paper Wastes Card */}
-            <Card className="bg-bg-light hover:shadow-lg transition-shadow">
-              <CardContent className="p-8">
-                <img
-                  src="https://images.unsplash.com/photo-1586348943529-beaae6c28db9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600"
-                  alt="Paper recycling and document disposal"
-                  className="rounded-lg mb-6 w-full h-48 object-cover"
-                />
-                <div className="text-center">
-                  <div className="bg-blue-600 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Leaf className="h-8 w-8" />
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {/* Chemical Wastes Card */}
+              <Card className="bg-bg-light hover:shadow-lg transition-shadow">
+                <CardContent className="p-8">
+                  <img
+                    src="https://i.pinimg.com/1200x/e5/c7/05/e5c70568d04fe1ee27865ccadc1743e6.jpg"
+                    alt="Chemical waste handling and laboratory safety"
+                    className="rounded-lg mb-6 w-full h-48 object-cover"
+                  />
+                  <div className="text-center">
+                    <div className="bg-red-600 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Recycle className="h-8 w-8" />
+                    </div>
+                    <h3 className="text-xl font-bold text-text-dark mb-4">
+                      Chemical Wastes
+                    </h3>
+                    <p className="text-gray-600 mb-6">
+                      Laboratory chemical waste requires special handling and
+                      disposal. Learn about proper containment, labeling, and
+                      disposal procedures for scientific waste materials.
+                    </p>
+                    <Button
+                      onClick={() => showInfoModal("chemical")}
+                      className="bg-red-600 text-white hover:bg-red-700 transition-colors"
+                    >
+                      Learn More
+                    </Button>
                   </div>
-                  <h3 className="text-xl font-bold text-text-dark mb-4">
-                    Paper Wastes
-                  </h3>
-                  <p className="text-gray-600 mb-6">
-                    Paper materials including documents, books, and cardboard
-                    can be recycled effectively. Learn proper sorting and
-                    preparation techniques for maximum recycling efficiency.
-                  </p>
-                  <Button
-                    onClick={() => showInfoModal("paper")}
-                    className="bg-blue-600 text-white hover:bg-blue-700 transition-colors"
-                  >
-                    Learn More
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
 
-            {/* E Wastes Card */}
-            <Card className="bg-bg-light hover:shadow-lg transition-shadow">
-              <CardContent className="p-8">
-                <img
-                  src="https://images.unsplash.com/photo-1567789884554-0b844b597180?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600"
-                  alt="Electronic waste recycling and disposal"
-                  className="rounded-lg mb-6 w-full h-48 object-cover"
-                />
-                <div className="text-center">
-                  <div className="bg-purple-600 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Trash2 className="h-8 w-8" />
+              {/* Paper Wastes Card */}
+              <Card className="bg-bg-light hover:shadow-lg transition-shadow">
+                <CardContent className="p-8">
+                  <img
+                    src="https://i.pinimg.com/1200x/30/8b/50/308b504cfd08a38e1b1ae3ef0e072325.jpg"
+                    alt="Paper recycling and document disposal"
+                    className="rounded-lg mb-6 w-full h-48 object-cover"
+                  />
+                  <div className="text-center">
+                    <div className="bg-blue-600 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Leaf className="h-8 w-8" />
+                    </div>
+                    <h3 className="text-xl font-bold text-text-dark mb-4">
+                      Paper Wastes
+                    </h3>
+                    <p className="text-gray-600 mb-6">
+                      Paper materials including documents, books, and cardboard
+                      can be recycled effectively. Learn proper sorting and
+                      preparation techniques for maximum recycling efficiency.
+                    </p>
+                    <Button
+                      onClick={() => showInfoModal("paper")}
+                      className="bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+                    >
+                      Learn More
+                    </Button>
                   </div>
-                  <h3 className="text-xl font-bold text-text-dark mb-4">
-                    E Wastes
-                  </h3>
-                  <p className="text-gray-600 mb-6">
-                    Electronic devices and components require specialized
-                    disposal to recover valuable materials and prevent
-                    environmental harm. Learn about proper e-waste management
-                    procedures.
-                  </p>
-                  <Button
-                    onClick={() => showInfoModal("ewaste")}
-                    className="bg-purple-600 text-white hover:bg-purple-700 transition-colors"
-                  >
-                    Learn More
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
 
-            {/* General Waste Card */}
-            <Card className="bg-bg-light hover:shadow-lg transition-shadow">
-              <CardContent className="p-8">
-                <img
-                  src="https://images.unsplash.com/photo-1594736797933-d0511ba8fe65?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600"
-                  alt="General waste bins and disposal facilities"
-                  className="rounded-lg mb-6 w-full h-48 object-cover"
-                />
-                <div className="text-center">
-                  <div className="bg-gray-500 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Trash2 className="h-8 w-8" />
+              {/* E Wastes Card */}
+              <Card className="bg-bg-light hover:shadow-lg transition-shadow">
+                <CardContent className="p-8">
+                  <img
+                    src="https://i.pinimg.com/1200x/de/3a/8d/de3a8d7798eb2e622498e9968b9d5d52.jpg"
+                    alt="Electronic waste recycling and disposal"
+                    className="rounded-lg mb-6 w-full h-48 object-cover"
+                  />
+                  <div className="text-center">
+                    <div className="bg-purple-600 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Trash2 className="h-8 w-8" />
+                    </div>
+                    <h3 className="text-xl font-bold text-text-dark mb-4">
+                      E Wastes
+                    </h3>
+                    <p className="text-gray-600 mb-6">
+                      Electronic devices and components require specialized
+                      disposal to recover valuable materials and prevent
+                      environmental harm. Learn about proper e-waste management
+                      procedures.
+                    </p>
+                    <Button
+                      onClick={() => showInfoModal("ewaste")}
+                      className="bg-purple-600 text-white hover:bg-purple-700 transition-colors"
+                    >
+                      Learn More
+                    </Button>
                   </div>
-                  <h3 className="text-xl font-bold text-text-dark mb-4">
-                    General Wastes
-                  </h3>
-                  <p className="text-gray-600 mb-6">
-                    Food waste, plastic items, and polythene materials that
-                    require standard disposal methods. Learn about proper
-                    sorting and disposal strategies for everyday campus waste.
-                  </p>
-                  <Button
-                    onClick={() => showInfoModal("general")}
-                    className="bg-gray-500 text-white hover:bg-gray-600 transition-colors"
-                  >
-                    Learn More
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+
+              {/* General Waste Card */}
+              <Card className="bg-bg-light hover:shadow-lg transition-shadow">
+                <CardContent className="p-8">
+                  <img
+                    src="https://i.pinimg.com/736x/70/02/84/700284ddbcf3c852353134ad4182d3d2.jpg"
+                    alt="General waste bins and disposal facilities"
+                    className="rounded-lg mb-6 w-full h-48 object-cover"
+                  />
+                  <div className="text-center">
+                    <div className="bg-gray-500 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Trash2 className="h-8 w-8" />
+                    </div>
+                    <h3 className="text-xl font-bold text-text-dark mb-4">
+                      General Wastes
+                    </h3>
+                    <p className="text-gray-600 mb-6">
+                      Food waste, plastic items, and polythene materials that
+                      require standard disposal methods. Learn about proper
+                      sorting and disposal strategies for everyday University
+                      waste.
+                    </p>
+                    <Button
+                      onClick={() => showInfoModal("general")}
+                      className="bg-gray-500 text-white hover:bg-gray-600 transition-colors"
+                    >
+                      Learn More
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
 
           {/* Best Practices Section */}
           <div className="bg-gradient-to-r from-forest to-eco text-white rounded-xl p-8">
             <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold mb-4">Campus Best Practices</h3>
+              <h3 className="text-2xl font-bold mb-4">
+                University Best Practices
+              </h3>
               <p className="text-lg opacity-90">
                 Simple actions that make a big difference
               </p>

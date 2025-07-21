@@ -10,9 +10,11 @@ import {
   Sprout,
   Lightbulb,
   Heart,
+  Trash2,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { useAuth } from "@/hooks/useAuth";
 
 interface Event {
   id: number;
@@ -28,6 +30,7 @@ interface Event {
 export default function Events() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user, isAdmin } = useAuth();
 
   const { data: events, isLoading } = useQuery<Event[]>({
     queryKey: ["/api/events"],
@@ -49,6 +52,26 @@ export default function Events() {
       toast({
         title: "Error",
         description: "Failed to join event. It may be full or unavailable.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const deleteEventMutation = useMutation({
+    mutationFn: async (eventId: number) => {
+      await apiRequest("DELETE", `/api/events/${eventId}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/events"] });
+      toast({
+        title: "Success",
+        description: "Event has been deleted successfully!",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: "Failed to delete event. Please try again.",
         variant: "destructive",
       });
     },
@@ -90,7 +113,7 @@ export default function Events() {
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Join our waste management activities and university society
-              initiatives for a cleaner campus
+              initiatives for a cleaner University
             </p>
           </div>
 
@@ -121,7 +144,7 @@ export default function Events() {
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Join our waste management activities and university society
-            initiatives for a cleaner campus
+            initiatives for a cleaner University
           </p>
         </div>
 
@@ -171,26 +194,43 @@ export default function Events() {
                         {event.currentParticipants}/{event.maxParticipants}
                       </div>
                     </div>
-                    <Button
-                      onClick={() => joinEventMutation.mutate(event.id)}
-                      disabled={
-                        joinEventMutation.isPending ||
-                        event.currentParticipants >= event.maxParticipants
-                      }
-                      className={`${getButtonColor(
-                        event.eventType
-                      )} transition-colors text-sm`}
-                    >
-                      {event.currentParticipants >= event.maxParticipants
-                        ? "Full"
-                        : joinEventMutation.isPending
-                        ? "Joining..."
-                        : event.eventType === "workshop"
-                        ? "Register"
-                        : event.eventType === "competition"
-                        ? "Participate"
-                        : "Join Event"}
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={() => joinEventMutation.mutate(event.id)}
+                        disabled={
+                          joinEventMutation.isPending ||
+                          event.currentParticipants >= event.maxParticipants
+                        }
+                        className={`${getButtonColor(
+                          event.eventType
+                        )} transition-colors text-sm`}
+                      >
+                        {event.currentParticipants >= event.maxParticipants
+                          ? "Full"
+                          : joinEventMutation.isPending
+                          ? "Joining..."
+                          : event.eventType === "workshop"
+                          ? "Register"
+                          : event.eventType === "competition"
+                          ? "Participate"
+                          : "Join Event"}
+                      </Button>
+                      {isAdmin && (
+                        <Button
+                          onClick={() => deleteEventMutation.mutate(event.id)}
+                          disabled={deleteEventMutation.isPending}
+                          variant="destructive"
+                          size="sm"
+                          className="text-xs"
+                        >
+                          {deleteEventMutation.isPending ? (
+                            "Deleting..."
+                          ) : (
+                            <Trash2 className="h-4 w-4" />
+                          )}
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -218,7 +258,7 @@ export default function Events() {
                   Environmental Society
                 </h4>
                 <p className="text-sm text-gray-600">
-                  Leading campus sustainability initiatives
+                  Leading University sustainability initiatives
                 </p>
               </div>
               <div className="text-center p-4 hover:bg-bg-light rounded-lg transition-colors">
@@ -251,7 +291,7 @@ export default function Events() {
                   Student Union
                 </h4>
                 <p className="text-sm text-gray-600">
-                  Coordinating campus-wide programs
+                  Coordinating University-wide programs
                 </p>
               </div>
             </div>

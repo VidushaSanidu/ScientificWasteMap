@@ -1,13 +1,13 @@
+# env files
+./.env
+.env.local
+
 node_modules
 dist
 .DS_Store
 server/public
 vite.config.ts.*
 *.tar.gz
-
-# env files
-.env
-.env.local
 
 # Vercel
 .vercel

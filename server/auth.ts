@@ -135,7 +135,7 @@ export class AuthService {
       console.log("AuthService: User found, checking password");
 
       // Check password
-      const isValidPassword = await this.comparePassword(
+      const isValidPassword = await this.verifyPassword(
         credentials.password,
         user.password
       );

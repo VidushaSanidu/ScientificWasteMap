@@ -1,4 +1,5 @@
 import * as client from "openid-client";
+// @ts-ignore - Module resolution issue with openid-client/passport
 import { Strategy, type VerifyFunction } from "openid-client/passport";
 
 import passport from "passport";

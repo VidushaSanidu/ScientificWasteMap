@@ -8,14 +8,14 @@
       }
     },
     {
-      "src": "api/simple.ts",
+      "src": "api/index.ts",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/api/simple.ts"
+      "dest": "/api/index.ts"
     },
     {
       "src": "/(.*)",

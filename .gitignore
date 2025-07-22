@@ -11,3 +11,6 @@ vite.config.ts.*
 
 # Vercel
 .vercel
+
+# Built API files
+api/index.js

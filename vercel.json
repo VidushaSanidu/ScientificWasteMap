@@ -1,19 +1,7 @@
 {
   "version": 2,
-  "framework": null,
-  "functions": {
-    "api/index.ts": {
-      "runtime": "@vercel/node@20"
-    }
-  },
+  "buildCommand": "npm run vercel-build",
   "builds": [
-    {
-      "src": "api/index.ts",
-      "use": "@vercel/node@20",
-      "config": {
-        "maxLambdaSize": "50mb"
-      }
-    },
     {
       "src": "package.json",
       "use": "@vercel/static-build",
@@ -22,17 +10,19 @@
       }
     }
   ],
+  "functions": {
+    "api/**/*.js": {
+      "runtime": "nodejs20.x"
+    }
+  },
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/api/index.ts"
+      "dest": "/api/index.js"
     },
     {
       "src": "/(.*)",
       "dest": "/dist/public/$1"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  ]
 }

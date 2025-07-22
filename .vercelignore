@@ -9,6 +9,5 @@ _.log
 replit.nix
 .git
 dist/index.js
-server/index.ts
 README.md
 scripts/

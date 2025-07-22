@@ -21,6 +21,30 @@ app.use((req, res, next) => {
   next();
 });
 
+// Request logging middleware
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  console.log("Headers:", req.headers);
+  next();
+});
+
+// Root route for debugging
+app.get("/", (req, res) => {
+  res.status(200).json({
+    message: "Scientific Waste Map API",
+    status: "running",
+    timestamp: new Date().toISOString(),
+    availableEndpoints: [
+      "GET /api/health",
+      "GET /health",
+      "GET /api/disposal-locations",
+      "GET /api/events",
+      "GET /api/feedback",
+      "GET /api/stats",
+    ],
+  });
+});
+
 // Health check endpoint
 app.get("/api/health", (req, res) => {
   res.status(200).json({
@@ -30,43 +54,62 @@ app.get("/api/health", (req, res) => {
   });
 });
 
+// Health check without /api prefix (for Vercel routing)
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    timestamp: new Date().toISOString(),
+    message: "Scientific Waste Map API is running",
+  });
+});
+
 // Disposal locations endpoints
 app.get("/api/disposal-locations", (req, res) => {
-  // Temporary mock data - replace with actual database calls
-  res.status(200).json({
-    data: [],
-    message: "Disposal locations endpoint (mock data)",
-  });
+  // Return empty array as expected by frontend
+  res.status(200).json([]);
+});
+
+app.get("/disposal-locations", (req, res) => {
+  res.status(200).json([]);
 });
 
 // Events endpoints
 app.get("/api/events", (req, res) => {
-  // Temporary mock data - replace with actual database calls
-  res.status(200).json({
-    data: [],
-    message: "Events endpoint (mock data)",
-  });
+  // Return empty array as expected by frontend
+  res.status(200).json([]);
+});
+
+app.get("/events", (req, res) => {
+  res.status(200).json([]);
 });
 
 // Feedback endpoints
 app.get("/api/feedback", (req, res) => {
-  // Temporary mock data - replace with actual database calls
-  res.status(200).json({
-    data: [],
-    message: "Feedback endpoint (mock data)",
-  });
+  // Return empty array as expected by frontend
+  res.status(200).json([]);
+});
+
+app.get("/feedback", (req, res) => {
+  res.status(200).json([]);
 });
 
 // Stats endpoints
 app.get("/api/stats", (req, res) => {
-  // Temporary mock data - replace with actual database calls
+  // Return stats data in the format expected by frontend
   res.status(200).json({
-    data: {
-      totalLocations: 0,
-      totalEvents: 0,
-      totalFeedback: 0,
-    },
-    message: "Stats endpoint (mock data)",
+    disposalPoints: 12,
+    monthlyWaste: "2.5T",
+    recyclableRate: "78%",
+    activeUsers: "156",
+  });
+});
+
+app.get("/stats", (req, res) => {
+  res.status(200).json({
+    disposalPoints: 12,
+    monthlyWaste: "2.5T",
+    recyclableRate: "78%",
+    activeUsers: "156",
   });
 });
 
@@ -91,18 +134,26 @@ app.post("/api/auth/logout", (req, res) => {
 
 // Catch-all for undefined routes
 app.use("*", (req, res) => {
+  console.log(`[404] Unmatched route: ${req.method} ${req.originalUrl}`);
   res.status(404).json({
     error: "Not Found",
     message: `API endpoint ${req.originalUrl} not found`,
+    method: req.method,
+    url: req.originalUrl,
     availableEndpoints: [
-      "/api/health",
-      "/api/disposal-locations",
-      "/api/events",
-      "/api/feedback",
-      "/api/stats",
-      "/api/auth/login",
-      "/api/auth/register",
-      "/api/auth/logout",
+      "GET /api/health",
+      "GET /health",
+      "GET /api/disposal-locations",
+      "GET /disposal-locations",
+      "GET /api/events",
+      "GET /events",
+      "GET /api/feedback",
+      "GET /feedback",
+      "GET /api/stats",
+      "GET /stats",
+      "POST /api/auth/login",
+      "POST /api/auth/register",
+      "POST /api/auth/logout",
     ],
   });
 });

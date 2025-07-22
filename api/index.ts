@@ -68,6 +68,10 @@ app.use((err: any, req: Request, res: Response, _next: NextFunction) => {
   }
 });
 
-// For Vercel deployment, we don't need to listen on a port
-// Vercel handles that for us
+// For Vercel deployment, we need to export a handler function
+// Vercel handles the server startup for us
+
 export default app;
+
+// Also export as a named function for Vercel compatibility
+export const handler = app;

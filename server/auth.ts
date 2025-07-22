@@ -1,4 +1,4 @@
-import bcrypt from "bcryptjs";
+import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { storage } from "./storage.js";
 import type { User } from "@shared/schema";
@@ -39,14 +39,14 @@ export class AuthService {
   }
 
   async hashPassword(password: string): Promise<string> {
-    return bcrypt.hash(password, 12);
+    return bcryptjs.hash(password, 12);
   }
 
-  async comparePassword(
+  async verifyPassword(
     password: string,
     hashedPassword: string
   ): Promise<boolean> {
-    return bcrypt.compare(password, hashedPassword);
+    return bcryptjs.compare(password, hashedPassword);
   }
 
   generateToken(payload: JWTPayload): string {

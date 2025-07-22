@@ -1,15 +1,15 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
-import { setupAuth, isAuthenticated } from "./replitAuth";
-import { authService } from "./auth";
-import { healthCheck } from "./health";
+import { storage } from "./storage.js";
+import { setupAuth, isAuthenticated } from "./replitAuth.js";
+import { authService } from "./auth.js";
+import { healthCheck } from "./health.js";
 import {
   authenticateToken,
   requireAdmin,
   optionalAuth,
   type AuthenticatedRequest,
-} from "./middleware/auth";
+} from "./middleware/auth.js";
 import {
   insertDisposalLocationSchema,
   insertEventSchema,

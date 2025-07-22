@@ -15,7 +15,7 @@ import {
   type Stats,
   type InsertStats,
 } from "@shared/schema";
-import { db } from "./db";
+import { db } from "./db.js";
 import { eq, desc, and } from "drizzle-orm";
 
 // Interface for storage operations

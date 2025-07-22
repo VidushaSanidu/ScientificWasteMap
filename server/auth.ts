@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { storage } from "./storage";
+import { storage } from "./storage.js";
 import type { User } from "@shared/schema";
 
 export interface LoginCredentials {

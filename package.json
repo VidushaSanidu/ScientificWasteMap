@@ -9,8 +9,12 @@
     "vercel-build": "vite build",
     "start": "NODE_ENV=production node dist/index.js",
     "check": "tsc",
+    "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
-    "db:seed": "tsx scripts/seed-database.ts"
+    "db:migrate": "tsx scripts/migrate.ts",
+    "db:seed": "tsx scripts/seed-database.ts",
+    "db:setup": "npm run db:generate && npm run db:push && npm run db:seed",
+    "db:verify": "tsx scripts/verify-db.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

@@ -1,6 +1,6 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "../server/routes.js";
-import { serveStatic } from "../server/vite.js";
+// import { serveStatic } from "../server/vite.js";
 
 const app = express();
 app.use(express.json());

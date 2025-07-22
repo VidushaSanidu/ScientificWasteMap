@@ -7,6 +7,7 @@ This error occurs because the database tables haven't been created in your produ
 ## 🔧 Quick Fix Steps:
 
 ### Option 1: Use Vercel CLI (Recommended)
+
 1. Install Vercel CLI: `npm i -g vercel`
 2. Login to Vercel: `vercel login`
 3. Link your project: `vercel link`
@@ -21,7 +22,9 @@ This error occurs because the database tables haven't been created in your produ
    ```
 
 ### Option 2: Manual Database Setup
+
 1. **Set Environment Variables in Vercel Dashboard:**
+
    - Go to your Vercel project settings
    - Navigate to Environment Variables
    - Add:
@@ -29,13 +32,14 @@ This error occurs because the database tables haven't been created in your produ
      - `JWT_SECRET`: A secure random string
 
 2. **Push Database Schema:**
+
    ```bash
    # Generate migrations
    npx drizzle-kit generate
-   
+
    # Push to production database
    npx drizzle-kit push
-   
+
    # Seed with initial data
    npm run db:seed
    ```
@@ -54,6 +58,7 @@ This error occurs because the database tables haven't been created in your produ
 - `npm run db:seed`: Creates admin user and initial stats
 
 ## 🗃️ Database Tables Created:
+
 - `users` - User authentication and profiles
 - `disposal_locations` - Waste disposal points
 - `events` - Community events
@@ -62,15 +67,20 @@ This error occurs because the database tables haven't been created in your produ
 - `sessions` - Session management
 
 ## 🔐 Default Admin User:
+
 After seeding, you can login with:
+
 - **Email**: `admin@uop.ac.lk` (or your ADMIN_EMAIL env var)
 - **Password**: `admin123` (or your ADMIN_PASSWORD env var)
 
 ## ✅ Verification:
+
 After setup, your API endpoints will work with real data:
+
 - Authentication will use real user accounts
 - All CRUD operations will persist to PostgreSQL
 - Admin features will be functional
 
 ## 🎉 Once Complete:
+
 Your ScientificWasteMap will be fully functional with real database operations!

@@ -26,8 +26,15 @@ async function verifyDatabase() {
 
   try {
     // Check if tables exist
-    const tables = ['users', 'disposal_locations', 'events', 'feedback', 'stats', 'sessions'];
-    
+    const tables = [
+      "users",
+      "disposal_locations",
+      "events",
+      "feedback",
+      "stats",
+      "sessions",
+    ];
+
     for (const table of tables) {
       try {
         await db.execute(sql`SELECT 1 FROM ${sql.identifier(table)} LIMIT 1`);
@@ -40,9 +47,11 @@ async function verifyDatabase() {
 
     // Check if admin user exists
     try {
-      const adminCheck = await db.execute(sql`SELECT COUNT(*) as count FROM users WHERE role = 'admin'`);
+      const adminCheck = await db.execute(
+        sql`SELECT COUNT(*) as count FROM users WHERE role = 'admin'`
+      );
       const adminCount = Number(adminCheck.rows[0]?.count) || 0;
-      
+
       if (adminCount > 0) {
         console.log(`✅ Admin user exists (${adminCount} admin(s))`);
       } else {
@@ -54,7 +63,6 @@ async function verifyDatabase() {
 
     console.log("🎉 Database verification completed!");
     return true;
-
   } catch (error) {
     console.error("❌ Database verification failed:", error);
     return false;
@@ -63,14 +71,16 @@ async function verifyDatabase() {
   }
 }
 
-verifyDatabase().then((success) => {
-  if (!success) {
-    console.log("\n📋 To fix database issues:");
-    console.log("1. Run: npm run db:push");
-    console.log("2. Run: npm run db:seed");
+verifyDatabase()
+  .then((success) => {
+    if (!success) {
+      console.log("\n📋 To fix database issues:");
+      console.log("1. Run: npm run db:push");
+      console.log("2. Run: npm run db:seed");
+      process.exit(1);
+    }
+  })
+  .catch((error) => {
+    console.error("Verification process failed:", error);
     process.exit(1);
-  }
-}).catch((error) => {
-  console.error("Verification process failed:", error);
-  process.exit(1);
-});
+  });

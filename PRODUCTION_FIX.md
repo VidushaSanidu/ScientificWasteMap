@@ -7,6 +7,7 @@ Your production database needs to be set up with the required tables.
 ## 🚀 IMMEDIATE FIX (Choose One):
 
 ### Option A: Quick Fix via Vercel CLI
+
 ```bash
 # 1. Install Vercel CLI
 npm i -g vercel
@@ -15,7 +16,7 @@ npm i -g vercel
 vercel env add DATABASE_URL
 # Paste your PostgreSQL connection string
 
-# 3. Set your JWT_SECRET 
+# 3. Set your JWT_SECRET
 vercel env add JWT_SECRET
 # Enter a secure random string
 
@@ -24,12 +25,15 @@ npm run db:setup
 ```
 
 ### Option B: Manual Setup
+
 1. **Go to Vercel Dashboard** → Your Project → Settings → Environment Variables
 2. **Add these variables:**
+
    - `DATABASE_URL`: Your PostgreSQL connection string
    - `JWT_SECRET`: A secure random string (e.g., `your-very-secure-jwt-secret-2024`)
 
 3. **Run these commands locally:**
+
    ```bash
    npm run db:push      # Creates tables in production
    npm run db:seed      # Adds admin user
@@ -43,13 +47,17 @@ npm run db:setup
    ```
 
 ## 🔍 Verify Fix:
+
 After setup, run:
+
 ```bash
 npm run db:verify
 ```
 
 ## 🎯 What This Does:
+
 - Creates all required database tables:
+
   - `users` (authentication)
   - `disposal_locations` (waste points)
   - `events` (community events)
@@ -62,9 +70,11 @@ npm run db:verify
   - Password: `admin123`
 
 ## ⚡ Expected Result:
+
 After fix, your API will work with real data instead of returning errors.
 
 ## � If Still Having Issues:
+
 1. Check environment variables are set in Vercel
 2. Verify your DATABASE_URL is correct
 3. Check Vercel function logs for other errors
